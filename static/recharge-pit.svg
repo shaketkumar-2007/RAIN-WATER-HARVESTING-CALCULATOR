@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" role="img" aria-labelledby="title">
+  <title id="title">Groundwater recharge pit</title>
+  <rect width="500" height="300" rx="24" fill="#10251b"/>
+  <path d="M0 190h500v110H0z" fill="#765b43"/>
+  <path d="M145 165h210v135H145z" fill="#2f261d" stroke="#d0a77e" stroke-width="6"/>
+  <path d="M185 120v45M250 90v75M315 120v45" stroke="#62b9e8" stroke-width="7" stroke-linecap="round"/>
+  <path d="M185 165l-12 20M250 165l-12 20M315 165l-12 20" stroke="#62b9e8" stroke-width="4"/>
+  <circle cx="190" cy="220" r="12" fill="#b4d7df"/><circle cx="250" cy="255" r="14" fill="#9ebfc7"/><circle cx="310" cy="215" r="10" fill="#c4e0e4"/>
+  <text x="250" y="35" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20" font-weight="700">GROUNDWATER RECHARGE</text>
+</svg>

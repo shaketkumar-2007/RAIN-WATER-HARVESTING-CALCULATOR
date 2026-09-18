@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_name }} | About</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <canvas id="rainCanvas"></canvas>
+    <div class="rain-overlay"></div>
+
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Open color settings" aria-expanded="false">
+        <span class="theme-toggle-swatch"></span>
+        <span class="theme-toggle-label">Colors</span>
+    </button>
+
+    <div class="theme-panel" id="themePanel" aria-label="Theme controls" hidden>
+        <label>
+            <span>Background</span>
+            <input type="color" id="bgColor" value="#020403" aria-label="Choose background color">
+        </label>
+        <label>
+            <span>Accent</span>
+            <input type="color" id="accentColor" value="#00ff88" aria-label="Choose accent color">
+        </label>
+    </div>
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
+
+    <div class="website">
+        <header class="header">
+            <div class="logo">
+                <span class="logo-water">💧</span>
+                {{ site_name }}
+            </div>
+
+            <nav class="top-nav" aria-label="Main navigation">
+                <a href="/">Home</a>
+                <a href="/calculator">Calculator</a>
+                <a href="/about" aria-current="page">About</a>
+            </nav>
+
+            <div class="live-status">
+                <span class="live-dot"></span>
+                SMART WATER DESIGN
+            </div>
+        </header>
+
+        <main class="page-main" id="main-content">
+            <section class="page-hero small-hero">
+                <div class="hero-content">
+                    <div class="small-title">OUR MISSION</div>
+                    <h1>BUILDING <span>WATER RESILIENCE</span></h1>
+                    <p>RainHarvest Pro helps households, schools, and communities estimate roof runoff, choose practical storage, and make better water decisions for a changing climate.</p>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <div class="info-grid">
+                    <article class="info-card">
+                        <div class="feature-icon">🏠</div>
+                        <h3>Home Water Planning</h3>
+                        <p>Use our calculator to estimate annual collection based on roof size, local rainfall, and material type.</p>
+                    </article>
+                    <article class="info-card">
+                        <div class="feature-icon">🌍</div>
+                        <h3>Groundwater Support</h3>
+                        <p>Recharge wells and clay pits help reduce runoff and support aquifer recovery over time.</p>
+                    </article>
+                    <article class="info-card">
+                        <div class="feature-icon">📈</div>
+                        <h3>Smarter Investment</h3>
+                        <p>Choose storage capacity with confidence so your system matches realistic collection needs.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="content-section compact">
+                <div class="section-heading">
+                    <div class="section-number">02 / HOW IT HELPS</div>
+                    <h2>Simple rainfall planning for a better future</h2>
+                </div>
+
+                <div class="steps-wrap">
+                    <div class="step-card">
+                        <span>01</span>
+                        <h4>Measure your roof</h4>
+                        <p>Input your roof area and choose your roofing material to estimate catchment performance.</p>
+                    </div>
+                    <div class="step-card">
+                        <span>02</span>
+                        <h4>Check local rainfall</h4>
+                        <p>Compare your region with annual rainfall data to understand sustainable storage potential.</p>
+                    </div>
+                    <div class="step-card">
+                        <span>03</span>
+                        <h4>Plan your system</h4>
+                        <p>Use the recommendation to decide whether you need recharge, storage, or a combined setup.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div>{{ site_name }}</div>
+            <div>SAVE WATER • HARVEST RAIN • BUILD THE FUTURE</div>
+        </footer>
+    </div>
+
+    <script>
+        const root = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        const themePanel = document.getElementById('themePanel');
+        const bgColorInput = document.getElementById('bgColor');
+        const accentColorInput = document.getElementById('accentColor');
+
+        function applyTheme(bg, accent) {
+            root.style.setProperty('--bg', bg);
+            root.style.setProperty('--bg-alt', adjustColor(bg, 10));
+            root.style.setProperty('--panel', adjustColor(bg, 18));
+            root.style.setProperty('--accent', accent);
+            root.style.setProperty('--accent-soft', adjustColor(accent, 28));
+            root.style.setProperty('--accent-strong', accent);
+            sessionStorage.setItem('rainharvest-theme', JSON.stringify({ bg, accent }));
+        }
+
+        function adjustColor(hex, amount) {
+            const value = hex.replace('#', '');
+            const num = parseInt(value, 16);
+            const r = Math.min(255, Math.max(0, ((num >> 16) & 255) + amount));
+            const g = Math.min(255, Math.max(0, ((num >> 8) & 255) + amount));
+            const b = Math.min(255, Math.max(0, (num & 255) + amount));
+            return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+        }
+
+        localStorage.removeItem('rainharvest-theme');
+        const savedTheme = JSON.parse(sessionStorage.getItem('rainharvest-theme') || '{}');
+        if (savedTheme.bg && savedTheme.accent) {
+            bgColorInput.value = savedTheme.bg;
+            accentColorInput.value = savedTheme.accent;
+        }
+
+        applyTheme(bgColorInput.value, accentColorInput.value);
+
+        bgColorInput.addEventListener('input', (event) => applyTheme(event.target.value, accentColorInput.value));
+        accentColorInput.addEventListener('input', (event) => applyTheme(bgColorInput.value, event.target.value));
+
+        themeToggle.addEventListener('click', () => {
+            const isOpen = !themePanel.hidden;
+            themePanel.hidden = isOpen;
+            themeToggle.setAttribute('aria-expanded', String(!isOpen));
+            themeToggle.classList.toggle('open', !isOpen);
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!themePanel.hidden && !themePanel.contains(event.target) && !themeToggle.contains(event.target)) {
+                themePanel.hidden = true;
+                themeToggle.setAttribute('aria-expanded', 'false');
+                themeToggle.classList.remove('open');
+            }
+        });
+
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 300);
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    </script>
+
+    <script>
+        const canvas = document.getElementById('rainCanvas');
+        const ctx = canvas.getContext('2d');
+        let drops = [];
+        const savedLocation = JSON.parse(localStorage.getItem('rainharvest-location') || '{}');
+        const rainfall = Number(savedLocation.rainfall) || 0;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            createDrops();
+        }
+
+        function createDrops() {
+            drops = [];
+            const count = 70;
+            for (let i = 0; i < count; i++) {
+                drops.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    length: 8 + Math.random() * 18,
+                    speed: 0.7 + Math.random() * 1.5,
+                    opacity: 0.35 + Math.random() * 0.55,
+                    width: 0.8 + Math.random() * 1.4,
+                    drift: -0.4 + Math.random() * 0.8
+                });
+            }
+        }
+
+        function drawRain() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ff88';
+            const rainFactor = Math.min(Math.max(rainfall / 3000, 0), 1);
+            const speedMultiplier = 0.35 + Math.pow(rainFactor, 1.4) * 5.5;
+
+            drops.forEach((drop) => {
+                drop.y += drop.speed * speedMultiplier;
+                drop.x += Math.sin(Date.now() / 500 + drop.y / 20) * 1.5;
+
+                if (drop.y > canvas.height) {
+                    drop.y = -drop.length - Math.random() * 100;
+                    drop.x = Math.random() * canvas.width;
+                }
+
+                const rgb = accent === '#00ff88' ? { r: 37, g: 200, b: 130 } : { r: 80, g: 180, b: 255 };
+                ctx.beginPath();
+                ctx.moveTo(drop.x, drop.y);
+                ctx.lineTo(drop.x + drop.drift * 2, drop.y + drop.length);
+                ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${drop.opacity})`;
+                ctx.lineWidth = drop.width;
+                ctx.stroke();
+            });
+
+            requestAnimationFrame(drawRain);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        drawRain();
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
+  <title id="title">Rainwater harvesting system diagram</title>
+  <desc id="desc">Rain falls on a roof, flows through gutters and a filter into a storage tank, while overflow recharges the ground.</desc>
+  <rect width="900" height="520" rx="28" fill="#07140e"/>
+  <path d="M80 240 270 90l190 150" fill="none" stroke="#00c978" stroke-width="12" stroke-linejoin="round"/>
+  <path d="M115 240h310v150H115z" fill="#10251b" stroke="#9ee8c5" stroke-width="5"/>
+  <path d="M270 90v150" stroke="#9ee8c5" stroke-width="5"/>
+  <path d="M425 238h95v28" fill="none" stroke="#00c978" stroke-width="9"/>
+  <rect x="510" y="244" width="70" height="48" rx="8" fill="#e6c16a"/>
+  <text x="545" y="274" text-anchor="middle" font-family="Arial" font-size="13" font-weight="700" fill="#1b241d">FILTER</text>
+  <path d="M580 268h85" stroke="#00c978" stroke-width="9"/>
+  <path d="M665 230h135v190H665z" fill="#123625" stroke="#9ee8c5" stroke-width="6"/>
+  <path d="M670 330h125v85H670z" fill="#16895c"/>
+  <path d="M735 205v25M735 420v38" stroke="#9ee8c5" stroke-width="6"/>
+  <path d="M735 458c0 0-45 28-70 50M735 458c0 0 45 28 70 50" stroke="#8b6b4c" stroke-width="8" fill="none"/>
+  <path d="M170 25v70M230 25v70M290 25v70M350 25v70" stroke="#62b9e8" stroke-width="7" stroke-linecap="round"/>
+  <path d="M170 95l-12 22M230 95l-12 22M290 95l-12 22M350 95l-12 22" stroke="#62b9e8" stroke-width="4"/>
+  <g font-family="Arial" font-size="18" font-weight="700" fill="#f2fff8">
+    <text x="160" y="435">ROOF CATCHMENT</text>
+    <text x="490" y="330">FIRST-FLUSH</text>
+    <text x="680" y="190">STORAGE TANK</text>
+    <text x="635" y="505">GROUNDWATER RECHARGE</text>
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" role="img" aria-labelledby="title">
+  <title id="title">Covered rainwater storage tank</title>
+  <rect width="500" height="300" rx="24" fill="#10251b"/>
+  <path d="M140 85h220v145H140z" fill="#16895c" stroke="#b6efd4" stroke-width="6"/>
+  <ellipse cx="250" cy="85" rx="110" ry="25" fill="#0d5d40" stroke="#b6efd4" stroke-width="6"/>
+  <path d="M165 150h170M165 190h170" stroke="#8ad9b7" stroke-width="4" opacity=".7"/>
+  <path d="M210 58V35h80v23" fill="none" stroke="#b6efd4" stroke-width="6"/>
+  <text x="250" y="270" text-anchor="middle" fill="#fff" font-family="Arial" font-size="20" font-weight="700">COVERED STORAGE</text>
+</svg>

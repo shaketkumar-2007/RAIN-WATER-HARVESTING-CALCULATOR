@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ site_name }} | Rainwater Harvesting Calculator</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <!-- =========================================
+         ANIMATED RAIN BACKGROUND
+    ========================================== -->
+
+    <canvas id="rainCanvas"></canvas>
+
+    <!-- Dark overlay -->
+    <div class="rain-overlay"></div>
+
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Open color settings" aria-expanded="false">
+        <span class="theme-toggle-swatch"></span>
+        <span class="theme-toggle-label">Colors</span>
+    </button>
+
+    <div class="theme-panel" id="themePanel" aria-label="Theme controls" hidden>
+        <label>
+            <span>Background</span>
+            <input type="color" id="bgColor" value="#020403" aria-label="Choose background color">
+        </label>
+        <label>
+            <span>Accent</span>
+            <input type="color" id="accentColor" value="#00ff88" aria-label="Choose accent color">
+        </label>
+    </div>
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
+
+    <!-- =========================================
+         MAIN WEBSITE
+    ========================================== -->
+
+    <div class="website">
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div class="logo">
+                <span class="logo-water">💧</span>
+                {{ site_name }}
+            </div>
+
+            <nav class="top-nav" aria-label="Main navigation">
+                <a href="/">Home</a>
+                <a href="/calculator" aria-current="page">Calculator</a>
+                <a href="/about">About</a>
+            </nav>
+
+            <div class="live-status">
+                <span class="live-dot"></span>
+                LIVE RAIN SIMULATION
+            </div>
+
+        </header>
+
+
+        <!-- HERO SECTION -->
+
+        <main id="main-content">
+        <section class="hero" aria-labelledby="calculator-title">
+
+            <div class="hero-content">
+
+                <div class="small-title">
+                    SMART WATER MANAGEMENT
+                </div>
+
+                <h1 id="calculator-title">
+                    RAINWATER
+                    <span>HARVESTING</span>
+                    CALCULATOR
+                </h1>
+
+                <p>
+                    Calculate how much rainwater your roof can collect
+                    and discover the most suitable harvesting system
+                    for your location.
+                </p>
+
+                <div class="rain-info">
+
+                    <div class="rain-info-item">
+                        <span class="info-label">RAIN INTENSITY</span>
+                        <span id="rainStatus">MODERATE</span>
+                    </div>
+
+                    <div class="rain-info-item">
+                        <span class="info-label">ROOF AREA</span>
+                        <span id="areaStatus">100 m²</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="hero-showcase" aria-label="RainHarvest Pro system preview">
+            <div class="showcase-topline">
+                <span>LIVE SYSTEM PREVIEW</span>
+                <span class="showcase-live">● ACTIVE</span>
+            </div>
+            <div class="showcase-tank">
+                <div class="tank-water"></div>
+                <div class="tank-label">RAIN<br>RESERVE</div>
+                <div class="tank-value"><span id="previewLevel">0</span><span>%</span></div>
+            </div>
+            <div class="showcase-stats">
+                <div>
+                    <span>RUNOFF READY</span>
+                    <strong id="previewRunoff">0 L</strong>
+                </div>
+                <div>
+                    <span>EFFICIENCY</span>
+                    <strong id="previewEfficiency">0%</strong>
+                </div>
+            </div>
+            </div>
+
+        </section>
+
+
+        <!-- CALCULATOR -->
+
+        <section class="calculator-section">
+
+            <div class="calculator-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <div class="section-number">
+                            01 / INPUT
+                        </div>
+
+                        <h2>
+                            ENTER YOUR DETAILS
+                        </h2>
+                    </div>
+
+                    <div class="drop-icon">
+                        💧
+                    </div>
+
+                </div>
+
+
+                <form method="POST" id="calculatorForm">
+
+                    <!-- STATE -->
+
+                    <div class="input-group">
+
+                        <label for="state">
+                            SELECT STATE
+                        </label>
+
+                        <select
+                            name="state"
+                            id="state"
+                            onchange="stateChanged()">
+
+                            <option value="" data-rainfall="0" {% if not selected_state %}selected{% endif %}>
+                                Select a state
+                            </option>
+
+                            {% for state, rain in states.items() %}
+
+                            <option
+                                value="{{ state }}"
+                                data-rainfall="{{ rain }}"
+                                {% if state == selected_state %}
+                                selected
+                                {% endif %}>
+
+                                {{ state }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <!-- DISTRICT -->
+
+                    <div class="input-group">
+
+                        <label for="district">
+                            SELECT DISTRICT
+                        </label>
+
+                        <select
+                            name="district"
+                            id="district"
+                            onchange="districtChanged()">
+                            <option value="">Select a state first</option>
+                        </select>
+
+                        <div class="input-hint">
+                            Locality values are planning estimates based on the site's rainfall dataset, not live weather data.
+                        </div>
+
+                    </div>
+
+
+                    <!-- RAINFALL -->
+
+                    <div class="input-group">
+
+                        <label for="rainfall">
+                            ANNUAL RAINFALL
+                            <span>(mm)</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            name="rainfall"
+                            id="rainfall"
+                            value="{{ rainfall }}"
+                            min="0"
+                            step="1"
+                            readonly
+                            aria-readonly="true"
+                            oninput="updateRainAnimation()">
+
+                        <div class="input-hint">
+                            Rainfall is automatically selected from the chosen locality and cannot be edited.
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROOF AREA -->
+
+                    <div class="input-group">
+
+                        <label for="roof_area">
+                            ROOF AREA
+                            <span>(m²)</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            name="roof_area"
+                            id="roof_area"
+                            value="{{ roof_area }}"
+                            min="0.1"
+                            max="100000"
+                            step="1"
+                            oninput="updateRainAnimation()">
+
+                        <div class="input-hint">
+                            Enter the rooftop catchment area. Maximum supported area: 100,000 m².
+                        </div>
+
+                    </div>
+
+                    <div class="input-group unit-row">
+                        <label for="area_unit">ROOF AREA UNIT</label>
+                        <select name="area_unit" id="area_unit" onchange="updateRainAnimation()">
+                            <option value="m2" {% if area_unit == "m2" %}selected{% endif %}>Square metres (m²)</option>
+                            <option value="ft2" {% if area_unit == "ft2" %}selected{% endif %}>Square feet (ft²)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group unit-row">
+                        <label for="water_unit">SHOW WATER AS</label>
+                        <select name="water_unit" id="water_unit" onchange="updatePreview()">
+                            <option value="litres" {% if water_unit == "litres" %}selected{% endif %}>Litres (L)</option>
+                            <option value="m3" {% if water_unit == "m3" %}selected{% endif %}>Cubic metres (m³)</option>
+                        </select>
+                    </div>
+
+
+                    <!-- ROOF TYPE -->
+
+                    <div class="input-group">
+
+                        <label for="roof_type">
+                            ROOF TYPE
+                        </label>
+
+                        <select name="roof_type" id="roof_type">
+
+                            {% for roof, coefficient in
+                            {
+                                "RCC / Concrete": 0.80,
+                                "Metal Sheet": 0.90,
+                                "Tiles": 0.75,
+                                "Other": 0.70
+                            }.items() %}
+
+                            <option
+                                value="{{ roof }}"
+                                {% if roof == roof_type %}
+                                selected
+                                {% endif %}>
+
+                                {{ roof }} — C = {{ coefficient }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BUTTON -->
+
+                    <button type="submit" class="calculate-btn">
+
+                        <span>
+                            CALCULATE WATER
+                        </span>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- =================================
+                 RESULTS
+            ================================== -->
+
+            {% if result %}
+
+            <div class="result-card">
+
+                <div class="result-top">
+
+                    <div>
+
+                        <div class="section-number">
+                            02 / RESULT
+                        </div>
+
+                        <h2>
+                            YOUR HARVESTING
+                            POTENTIAL
+                        </h2>
+
+                    </div>
+
+                    <div class="result-drop">
+                        💧
+                    </div>
+
+                </div>
+
+
+                <!-- WATER AMOUNT -->
+
+                <div class="water-result">
+
+                    <div class="water-number">
+                        {% if water_unit == "m3" %}{{ result.water_m3 }}{% else %}{{ result.water }}{% endif %}
+                    </div>
+
+                    <div class="water-unit">
+                        {% if water_unit == "m3" %}CUBIC METRES / YEAR{% else %}LITRES / YEAR{% endif %}
+                    </div>
+
+                </div>
+
+
+                <!-- RESULT GRID -->
+
+                <div class="result-grid">
+
+                    <div class="result-item">
+
+                        <span>
+                            STATE
+                        </span>
+
+                        <strong>
+                            {{ selected_state }}
+                        </strong>
+
+                    </div>
+
+                    <div class="result-item">
+
+                        <span>
+                            DISTRICT
+                        </span>
+
+                        <strong>
+                            {{ selected_district }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <span>
+                            RAINFALL
+                        </span>
+
+                        <strong>
+                            {{ result.rainfall }} mm
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <span>
+                            ROOF AREA
+                        </span>
+
+                        <strong>
+                            {% if area_unit == "ft2" %}{{ (result.area / 0.092903) | round(2) }} ft²{% else %}{{ result.area }} m²{% endif %}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <span>
+                            RUNOFF COEFFICIENT
+                        </span>
+
+                        <strong>
+                            {{ result.coefficient }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <div class="estimate-panel">
+                    <div class="recommendation-title">COLLECTION SNAPSHOT</div>
+                    <div class="estimate-grid">
+                        <div><span>MONTHLY AVERAGE</span><strong id="monthlyEstimate">0 L</strong></div>
+                        <div><span>PEAK SEASON</span><strong id="peakEstimate">0 L</strong></div>
+                        <div><span>DRY SEASON</span><strong id="dryEstimate">0 L</strong></div>
+                    </div>
+                    <div class="rainfall-chart" aria-label="Estimated seasonal collection chart">
+                        <div class="chart-column"><div class="chart-bar" id="dryBar"></div><span>DRY</span></div>
+                        <div class="chart-column"><div class="chart-bar" id="normalBar"></div><span>NORMAL</span></div>
+                        <div class="chart-column"><div class="chart-bar" id="peakBar"></div><span>PEAK</span></div>
+                    </div>
+                </div>
+
+
+                <!-- RAIN CATEGORY -->
+
+                <div class="recommendation">
+
+                    <div class="recommendation-title">
+                        RAINFALL CATEGORY
+                    </div>
+
+                    <div class="category">
+                        {{ result.category }}
+                    </div>
+
+                </div>
+
+
+                <!-- HARVESTING METHOD -->
+
+                <div class="recommendation green">
+
+                    <div class="recommendation-title">
+                        RECOMMENDED SYSTEM
+                    </div>
+
+                    <div class="recommendation-main">
+                        {{ result.method }}
+                    </div>
+
+                    <p>
+                        {{ result.scale }}
+                    </p>
+
+                </div>
+
+
+                <!-- STORAGE -->
+
+                <div class="recommendation">
+
+                    <div class="recommendation-title">
+                        STORAGE SOLUTION
+                    </div>
+
+                    <div class="recommendation-main">
+                        {{ result.storage }}
+                    </div>
+
+                </div>
+
+
+                <!-- SMART MESSAGE -->
+
+                <div class="smart-message">
+
+                    <div class="smart-icon">
+                        ⚡
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            SMART RECOMMENDATION
+                        </strong>
+
+                        <p>
+                            Your roof can potentially collect
+                            <b>{% if water_unit == "m3" %}{{ result.water_m3 }} cubic metres{% else %}{{ result.water }} litres{% endif %}</b>
+                            of rainwater every year.
+                            Using a suitable storage and recharge
+                            system can help conserve this water.
+                        </p>
+
+                    </div>
+
+                    <div class="satisfaction-card">
+                        <div class="recommendation-title">IS THIS RECOMMENDATION USEFUL?</div>
+                        <div class="satisfaction-options">
+                            <label><input type="checkbox" id="satisfiedCheck" onchange="recommendationSatisfied()"> Satisfied</label>
+                            <label><input type="checkbox" id="unsatisfiedCheck" onchange="recommendationUnsatisfied()"> Unsatisfied</label>
+                        </div>
+                        <div id="moreIdeas" class="more-ideas" hidden>
+                            <div class="recommendation-title">MORE WATER-SAVING IDEAS FOR {{ selected_district or 'YOUR LOCALITY' }}</div>
+                            <ul id="ideaList"></ul>
+                            <button type="button" class="ideas-btn" onclick="showMoreIdeas()">Show another idea</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =========================================
+             FORMULA SECTION
+        ========================================== -->
+
+        <section class="formula-section">
+
+            <div class="formula-card">
+
+                <div class="section-number">
+                    03 / FORMULA
+                </div>
+
+                <h2>
+                    HOW IS IT CALCULATED?
+                </h2>
+
+                <div class="formula">
+
+                    <span>
+                        WATER
+                    </span>
+
+                    <span>
+                        =
+                    </span>
+
+                    <span>
+                        ROOF AREA
+                    </span>
+
+                    <span>
+                        ×
+                    </span>
+
+                    <span>
+                        RAINFALL
+                    </span>
+
+                    <span>
+                        ×
+                    </span>
+
+                    <span>
+                        RUNOFF COEFFICIENT
+                    </span>
+
+                </div>
+
+                <p>
+                    Rainfall is measured in millimetres.
+                    Since 1 mm of rainfall over 1 m² equals
+                    approximately 1 litre of water, the result
+                    gives the estimated annual collection in litres.
+                </p>
+
+            </div>
+
+        </section>
+        </main>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <div>
+                {{ site_name }}
+            </div>
+
+            <div>
+                SAVE WATER • HARVEST RAIN • BUILD THE FUTURE
+            </div>
+
+        </footer>
+
+    </div>
+
+
+    <!-- =========================================
+         DYNAMIC RAIN JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+        const canvas = document.getElementById("rainCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const rainfallInput = document.getElementById("rainfall");
+        const areaInput = document.getElementById("roof_area");
+        const areaUnitInput = document.getElementById("area_unit");
+        const waterUnitInput = document.getElementById("water_unit");
+        const districtSelect = document.getElementById("district");
+        const districtData = {{ districts | tojson }};
+        const selectedDistrict = {{ selected_district | tojson }};
+
+        const rainStatus = document.getElementById("rainStatus");
+        const areaStatus = document.getElementById("areaStatus");
+        const previewLevel = document.getElementById("previewLevel");
+        const previewRunoff = document.getElementById("previewRunoff");
+        const previewEfficiency = document.getElementById("previewEfficiency");
+        const tankWater = document.querySelector(".tank-water");
+        const monthlyEstimate = document.getElementById("monthlyEstimate");
+        const peakEstimate = document.getElementById("peakEstimate");
+        const dryEstimate = document.getElementById("dryEstimate");
+        const dryBar = document.getElementById("dryBar");
+        const normalBar = document.getElementById("normalBar");
+        const peakBar = document.getElementById("peakBar");
+        const backToTop = document.getElementById("backToTop");
+
+        let drops = [];
+
+        let rainfall = Number(rainfallInput.value) || 1000;
+        let roofArea = Number(areaInput.value) || 100;
+        let areaEdited = {{ "true" if result else "false" }};
+
+        let targetDrops = 120;
+
+        const root = document.documentElement;
+        const themeToggle = document.getElementById("themeToggle");
+        const themePanel = document.getElementById("themePanel");
+        const bgColorInput = document.getElementById("bgColor");
+        const accentColorInput = document.getElementById("accentColor");
+
+        function adjustColor(hex, amount) {
+            const value = hex.replace('#', '');
+            const num = parseInt(value, 16);
+            const r = Math.min(255, Math.max(0, ((num >> 16) & 255) + amount));
+            const g = Math.min(255, Math.max(0, ((num >> 8) & 255) + amount));
+            const b = Math.min(255, Math.max(0, (num & 255) + amount));
+            return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+        }
+
+        function applyTheme(bg, accent) {
+            root.style.setProperty('--bg', bg);
+            root.style.setProperty('--bg-alt', adjustColor(bg, 10));
+            root.style.setProperty('--panel', adjustColor(bg, 18));
+            root.style.setProperty('--accent', accent);
+            root.style.setProperty('--accent-soft', adjustColor(accent, 28));
+            sessionStorage.setItem('rainharvest-theme', JSON.stringify({ bg, accent }));
+        }
+
+        localStorage.removeItem('rainharvest-theme');
+        const savedTheme = JSON.parse(sessionStorage.getItem('rainharvest-theme') || '{}');
+        if (savedTheme.bg && savedTheme.accent) {
+            bgColorInput.value = savedTheme.bg;
+            accentColorInput.value = savedTheme.accent;
+        }
+
+        applyTheme(bgColorInput.value, accentColorInput.value);
+        bgColorInput.addEventListener('input', (event) => applyTheme(event.target.value, accentColorInput.value));
+        accentColorInput.addEventListener('input', (event) => applyTheme(bgColorInput.value, event.target.value));
+
+        themeToggle.addEventListener("click", () => {
+            const isOpen = !themePanel.hidden;
+            themePanel.hidden = isOpen;
+            themeToggle.setAttribute("aria-expanded", String(!isOpen));
+            themeToggle.classList.toggle("open", !isOpen);
+        });
+
+        document.addEventListener("click", (event) => {
+            if (!themePanel.hidden && !themePanel.contains(event.target) && !themeToggle.contains(event.target)) {
+                themePanel.hidden = true;
+                themeToggle.setAttribute("aria-expanded", "false");
+                themeToggle.classList.remove("open");
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 300);
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            createDrops();
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+
+        function getRainCategory(value) {
+            if (value < 600) return "LOW";
+            if (value < 1000) return "MODERATE";
+            if (value < 2000) return "HIGH";
+            return "VERY HIGH";
+        }
+
+        function updateRainAnimation() {
+            rainfall = Number(rainfallInput.value) || 0;
+            const enteredArea = Number(areaInput.value) || 1;
+            roofArea = areaUnitInput.value === "ft2"
+                ? enteredArea * 0.092903
+                : enteredArea;
+
+            const rainFactor = Math.min(Math.max(rainfall / 3000, 0), 1);
+            const areaFactor = Math.min(Math.max(roofArea / 1000, 0), 0.35);
+
+            targetDrops = Math.floor(35 + rainFactor * 220 + areaFactor * 80);
+            rainStatus.innerText = getRainCategory(rainfall);
+            areaStatus.innerText = enteredArea + (areaUnitInput.value === "ft2" ? " ft²" : " m²");
+            updatePreview();
+            const selectedState = document.getElementById("state").value;
+            const selectedDistrict = districtSelect.value;
+            localStorage.setItem("rainharvest-location", JSON.stringify({
+                state: selectedState,
+                district: selectedDistrict,
+                rainfall
+            }));
+            createDrops();
+        }
+
+        function updatePreview() {
+            const enteredArea = Number(areaInput.value) || 0;
+            const areaM2 = areaUnitInput.value === "ft2" ? enteredArea * 0.092903 : enteredArea;
+            const coefficient = {
+                "RCC / Concrete": 0.80,
+                "Metal Sheet": 0.90,
+                "Tiles": 0.75,
+                "Other": 0.70
+            }[document.getElementById("roof_type").value] || 0.80;
+            const runoffLitres = Math.max(0, rainfall * areaM2 * coefficient);
+            const level = areaEdited
+                ? Math.min(100, Math.max(0, Math.round((areaM2 / 1000) * 100)))
+                : 0;
+            const monthly = runoffLitres / 12;
+            const dry = monthly * 0.45;
+            const normal = monthly;
+            const peak = monthly * 1.8;
+            const unitLabel = waterUnitInput.value === "m3" ? " m³" : " L";
+            const formatEstimate = value => (waterUnitInput.value === "m3"
+                ? (value / 1000).toFixed(2)
+                : Math.round(value).toLocaleString()) + unitLabel;
+            previewLevel.textContent = level;
+            previewRunoff.textContent = waterUnitInput.value === "m3"
+                ? (runoffLitres / 1000).toFixed(2) + " m³"
+                : Math.round(runoffLitres).toLocaleString() + " L";
+            previewEfficiency.textContent = rainfall > 0 ? Math.round(coefficient * 100) + "%" : "0%";
+            tankWater.style.height = Math.max(8, level) + "%";
+            if (!monthlyEstimate) return;
+            monthlyEstimate.textContent = formatEstimate(monthly);
+            dryEstimate.textContent = formatEstimate(dry);
+            peakEstimate.textContent = formatEstimate(peak);
+            dryBar.style.height = Math.max(8, (dry / peak) * 100) + "%";
+            normalBar.style.height = Math.max(8, (normal / peak) * 100) + "%";
+            peakBar.style.height = Math.max(8, (peak / peak) * 100) + "%";
+        }
+
+        function stateChanged() {
+            const stateSelect = document.getElementById("state");
+            const selectedOption = stateSelect.options[stateSelect.selectedIndex];
+            const stateRainfall = Number(selectedOption.dataset.rainfall);
+            updateDistrictOptions();
+            rainfallInput.value = districtSelect.options.length
+                ? districtSelect.options[0].dataset.rainfall
+                : stateRainfall;
+            updateRainAnimation();
+        }
+
+        function updateDistrictOptions() {
+            const state = document.getElementById("state").value;
+            const districts = districtData[state] || {};
+            districtSelect.innerHTML = "";
+
+            Object.entries(districts).forEach(([district, rainfall]) => {
+                const option = document.createElement("option");
+                option.value = district;
+                option.textContent = district;
+                option.dataset.rainfall = rainfall;
+                option.selected = district === selectedDistrict;
+                districtSelect.appendChild(option);
+            });
+
+            if (!districtSelect.value && districtSelect.options.length) {
+                districtSelect.options[0].selected = true;
+            }
+
+            if (!districtSelect.options.length) {
+                const option = document.createElement("option");
+                option.value = "";
+                option.textContent = "Select a district";
+                districtSelect.appendChild(option);
+            }
+        }
+
+        function districtChanged() {
+            const selectedOption = districtSelect.options[districtSelect.selectedIndex];
+            if (selectedOption) {
+                rainfallInput.value = selectedOption.dataset.rainfall;
+                updateRainAnimation();
+            }
+        }
+
+        document.getElementById("roof_type").addEventListener("change", updatePreview);
+        areaInput.addEventListener("input", () => {
+            areaEdited = true;
+            updatePreview();
+        });
+
+        const ideas = [
+                "Install a first-flush filter to keep dust and debris out of stored water.",
+                "Use a covered tank and repair leaking taps, pipes, and gutters regularly.",
+                "Reuse kitchen rinse water for gardens and non-drinking cleaning.",
+                "Add mulch around plants to reduce evaporation in dry periods.",
+                "Use a recharge pit or soakaway to return overflow water to the ground."
+            ];
+        let ideaIndex = 0;
+
+        function recommendationSatisfied() {
+                const satisfied = document.getElementById("satisfiedCheck");
+                const unsatisfied = document.getElementById("unsatisfiedCheck");
+                if (satisfied.checked) {
+                    unsatisfied.checked = false;
+                    window.location.href = "/";
+                }
+        }
+
+        function recommendationUnsatisfied() {
+                const unsatisfied = document.getElementById("unsatisfiedCheck");
+                const satisfied = document.getElementById("satisfiedCheck");
+                if (unsatisfied.checked) {
+                    satisfied.checked = false;
+                    document.getElementById("moreIdeas").hidden = false;
+                    showMoreIdeas();
+                } else {
+                    document.getElementById("moreIdeas").hidden = true;
+                }
+        }
+
+        function showMoreIdeas() {
+                const ideaList = document.getElementById("ideaList");
+                const item = document.createElement("li");
+                item.textContent = ideas[ideaIndex % ideas.length];
+                ideaList.appendChild(item);
+                ideaIndex += 1;
+        }
+
+        function createDrops() {
+            drops = [];
+            const count = Math.min(targetDrops, 400);
+
+            for (let i = 0; i < count; i++) {
+                drops.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    length: 8 + Math.random() * 18,
+                    speed: 0.7 + Math.random() * 1.5,
+                    opacity: 0.45 + Math.random() * 0.8,
+                    width: 0.6 + Math.random() * 1.4,
+                    drift: -0.4 + Math.random() * 0.8
+                });
+            }
+        }
+
+        function drawRain() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const rainFactor = Math.min(Math.max(rainfall / 3000, 0), 1);
+            const speedMultiplier = 0.35 + Math.pow(rainFactor, 1.4) * 5.5;
+
+            drops.forEach(drop => {
+                drop.y += drop.speed * speedMultiplier;
+                drop.x += Math.sin(Date.now() / 500 + drop.y / 20) * 2.0;
+
+                if (drop.y > canvas.height) {
+                    drop.y = -drop.length - Math.random() * 100;
+                    drop.x = Math.random() * canvas.width;
+                }
+
+                let red; let green; let blue;
+
+                if (rainfall >= 2000) {
+                    red = 80; green = 255; blue = 180;
+                } else if (rainfall >= 1000) {
+                    red = 50; green = 230; blue = 180;
+                } else if (rainfall >= 600) {
+                    red = 30; green = 190; blue = 170;
+                } else {
+                    red = 30; green = 130; blue = 150;
+                }
+
+                ctx.beginPath();
+                ctx.moveTo(drop.x, drop.y);
+                ctx.lineTo(drop.x + drop.drift * 2, drop.y + drop.length);
+                ctx.strokeStyle = `rgba(${red}, ${green}, ${blue}, ${drop.opacity})`;
+                ctx.lineWidth = drop.width;
+                ctx.stroke();
+            });
+
+            requestAnimationFrame(drawRain);
+        }
+
+        resizeCanvas();
+        updateDistrictOptions();
+        if (districtSelect.value) {
+            districtChanged();
+        } else {
+            rainfallInput.value = 0;
+            updateRainAnimation();
+        }
+        updateRainAnimation();
+        updatePreview();
+        drawRain();
+
+    </script>
+
+</body>
+
+</html>
