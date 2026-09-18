@@ -162,6 +162,12 @@
 
                 <form method="POST" id="calculatorForm">
 
+                    {% if error_message %}
+                    <div class="form-message" role="alert" aria-live="assertive">
+                        {{ error_message }}
+                    </div>
+                    {% endif %}
+
                     <!-- STATE -->
 
                     <div class="input-group">
@@ -375,7 +381,7 @@
 
                 <!-- WATER AMOUNT -->
 
-                <div class="water-result">
+                <div class="water-result" aria-live="polite">
 
                     <div class="water-number">
                         {% if water_unit == "m3" %}{{ result.water_m3 }}{% else %}{{ result.water }}{% endif %}
@@ -387,6 +393,9 @@
 
                 </div>
 
+                <div class="result-note">
+                    Estimate based on: annual rainfall × roof area × runoff coefficient. District values are planning estimates, not live weather data.
+                </div>
 
                 <!-- RESULT GRID -->
 
@@ -708,7 +717,6 @@
             sessionStorage.setItem('rainharvest-theme', JSON.stringify({ bg, accent }));
         }
 
-        localStorage.removeItem('rainharvest-theme');
         const savedTheme = JSON.parse(sessionStorage.getItem('rainharvest-theme') || '{}');
         if (savedTheme.bg && savedTheme.accent) {
             bgColorInput.value = savedTheme.bg;
@@ -755,18 +763,19 @@
         }
 
         function updateRainAnimation() {
-            rainfall = Number(rainfallInput.value) || 0;
-            const enteredArea = Number(areaInput.value) || 1;
+            const rainfallValue = Number(rainfallInput.value);
+            rainfall = Number.isFinite(rainfallValue) ? rainfallValue : 0;
+            const enteredArea = Number(areaInput.value) || 0;
             roofArea = areaUnitInput.value === "ft2"
-                ? enteredArea * 0.092903
-                : enteredArea;
+                ? Math.max(0, enteredArea * 0.092903)
+                : Math.max(0, enteredArea);
 
             const rainFactor = Math.min(Math.max(rainfall / 3000, 0), 1);
             const areaFactor = Math.min(Math.max(roofArea / 1000, 0), 0.35);
 
             targetDrops = Math.floor(35 + rainFactor * 220 + areaFactor * 80);
-            rainStatus.innerText = getRainCategory(rainfall);
-            areaStatus.innerText = enteredArea + (areaUnitInput.value === "ft2" ? " ft²" : " m²");
+            rainStatus.innerText = rainfall > 0 ? getRainCategory(rainfall) : "NO DATA";
+            areaStatus.innerText = enteredArea > 0 ? enteredArea + (areaUnitInput.value === "ft2" ? " ft²" : " m²") : "0 m²";
             updatePreview();
             const selectedState = document.getElementById("state").value;
             const selectedDistrict = districtSelect.value;
@@ -817,10 +826,11 @@
         function stateChanged() {
             const stateSelect = document.getElementById("state");
             const selectedOption = stateSelect.options[stateSelect.selectedIndex];
-            const stateRainfall = Number(selectedOption.dataset.rainfall);
+            const stateRainfall = Number(selectedOption.dataset.rainfall || 0);
             updateDistrictOptions();
-            rainfallInput.value = districtSelect.options.length
-                ? districtSelect.options[0].dataset.rainfall
+            const firstDistrictOption = districtSelect.options[0];
+            rainfallInput.value = firstDistrictOption && firstDistrictOption.dataset.rainfall
+                ? firstDistrictOption.dataset.rainfall
                 : stateRainfall;
             updateRainAnimation();
         }
@@ -839,7 +849,7 @@
                 districtSelect.appendChild(option);
             });
 
-            if (!districtSelect.value && districtSelect.options.length) {
+            if (districtSelect.options.length) {
                 districtSelect.options[0].selected = true;
             }
 
@@ -899,8 +909,9 @@
                 const ideaList = document.getElementById("ideaList");
                 const item = document.createElement("li");
                 item.textContent = ideas[ideaIndex % ideas.length];
-                ideaList.appendChild(item);
                 ideaIndex += 1;
+                ideaList.innerHTML = "";
+                ideaList.appendChild(item);
         }
 
         function createDrops() {

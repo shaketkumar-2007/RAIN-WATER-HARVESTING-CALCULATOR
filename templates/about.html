@@ -137,7 +137,6 @@
             return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
         }
 
-        localStorage.removeItem('rainharvest-theme');
         const savedTheme = JSON.parse(sessionStorage.getItem('rainharvest-theme') || '{}');
         if (savedTheme.bg && savedTheme.accent) {
             bgColorInput.value = savedTheme.bg;
