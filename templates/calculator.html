@@ -244,7 +244,9 @@
                             step="1"
                             readonly
                             aria-readonly="true"
-                            oninput="updateRainAnimation()">
+                            inputmode="numeric"
+                            oninput="updateRainAnimation()"
+                            onblur="normalizeRoofArea()">
 
                         <div class="input-hint">
                             Rainfall is automatically selected from the chosen locality and cannot be edited.
@@ -319,7 +321,7 @@
                                 selected
                                 {% endif %}>
 
-                                {{ roof }} — C = {{ coefficient }}
+                                {{ roof }}
 
                             </option>
 
@@ -394,7 +396,7 @@
                 </div>
 
                 <div class="result-note">
-                    Estimate based on: annual rainfall × roof area × runoff coefficient. District values are planning estimates, not live weather data.
+                    District values are planning estimates, not live weather data.
                 </div>
 
                 <!-- RESULT GRID -->
@@ -460,6 +462,18 @@
 
                         <strong>
                             {{ result.coefficient }}
+                        </strong>
+
+                    </div>
+
+                    <div class="result-item">
+
+                        <span>
+                            COLLECTION EFFICIENCY
+                        </span>
+
+                        <strong>
+                            {{ result.efficiency }}
                         </strong>
 
                     </div>
@@ -576,64 +590,6 @@
         </section>
 
 
-        <!-- =========================================
-             FORMULA SECTION
-        ========================================== -->
-
-        <section class="formula-section">
-
-            <div class="formula-card">
-
-                <div class="section-number">
-                    03 / FORMULA
-                </div>
-
-                <h2>
-                    HOW IS IT CALCULATED?
-                </h2>
-
-                <div class="formula">
-
-                    <span>
-                        WATER
-                    </span>
-
-                    <span>
-                        =
-                    </span>
-
-                    <span>
-                        ROOF AREA
-                    </span>
-
-                    <span>
-                        ×
-                    </span>
-
-                    <span>
-                        RAINFALL
-                    </span>
-
-                    <span>
-                        ×
-                    </span>
-
-                    <span>
-                        RUNOFF COEFFICIENT
-                    </span>
-
-                </div>
-
-                <p>
-                    Rainfall is measured in millimetres.
-                    Since 1 mm of rainfall over 1 m² equals
-                    approximately 1 litre of water, the result
-                    gives the estimated annual collection in litres.
-                </p>
-
-            </div>
-
-        </section>
         </main>
 
 
@@ -687,8 +643,8 @@
 
         let drops = [];
 
-        let rainfall = Number(rainfallInput.value) || 1000;
-        let roofArea = Number(areaInput.value) || 100;
+        let rainfall = Number(rainfallInput.value) || 0;
+        let roofArea = Math.round(Number(areaInput.value) || 0);
         let areaEdited = {{ "true" if result else "false" }};
 
         let targetDrops = 120;
@@ -765,7 +721,8 @@
         function updateRainAnimation() {
             const rainfallValue = Number(rainfallInput.value);
             rainfall = Number.isFinite(rainfallValue) ? rainfallValue : 0;
-            const enteredArea = Number(areaInput.value) || 0;
+            const enteredArea = Math.round(Number(areaInput.value) || 0);
+            areaInput.value = enteredArea;
             roofArea = areaUnitInput.value === "ft2"
                 ? Math.max(0, enteredArea * 0.092903)
                 : Math.max(0, enteredArea);
@@ -788,7 +745,7 @@
         }
 
         function updatePreview() {
-            const enteredArea = Number(areaInput.value) || 0;
+            const enteredArea = Math.round(Number(areaInput.value) || 0);
             const areaM2 = areaUnitInput.value === "ft2" ? enteredArea * 0.092903 : enteredArea;
             const coefficient = {
                 "RCC / Concrete": 0.80,
@@ -796,7 +753,8 @@
                 "Tiles": 0.75,
                 "Other": 0.70
             }[document.getElementById("roof_type").value] || 0.80;
-            const runoffLitres = Math.max(0, rainfall * areaM2 * coefficient);
+            const collectionEfficiency = 0.85;
+            const runoffLitres = Math.max(0, rainfall * areaM2 * coefficient * collectionEfficiency);
             const level = areaEdited
                 ? Math.min(100, Math.max(0, Math.round((areaM2 / 1000) * 100)))
                 : 0;
@@ -849,7 +807,7 @@
                 districtSelect.appendChild(option);
             });
 
-            if (districtSelect.options.length) {
+            if (districtSelect.options.length && !districtSelect.value) {
                 districtSelect.options[0].selected = true;
             }
 
@@ -872,8 +830,15 @@
         document.getElementById("roof_type").addEventListener("change", updatePreview);
         areaInput.addEventListener("input", () => {
             areaEdited = true;
-            updatePreview();
+            updateRainAnimation();
         });
+        areaInput.addEventListener("blur", normalizeRoofArea);
+        document.getElementById("calculatorForm").addEventListener("submit", normalizeRoofArea);
+
+        function normalizeRoofArea() {
+            areaInput.value = Math.max(0, Math.round(Number(areaInput.value) || 0));
+            updateRainAnimation();
+        }
 
         const ideas = [
                 "Install a first-flush filter to keep dust and debris out of stored water.",

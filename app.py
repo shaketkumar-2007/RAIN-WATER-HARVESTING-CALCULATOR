@@ -70,6 +70,7 @@ ROOF_COEFFICIENTS = {
     "Tiles": 0.75,
     "Other": 0.70
 }
+COLLECTION_EFFICIENCY = 0.85
 MAX_ROOF_AREA_M2 = 100000
 
 
@@ -85,6 +86,10 @@ def to_float(value, default=0.0):
 
 def clamp(value, min_value, max_value):
     return max(min_value, min(value, max_value))
+
+
+def round_roof_area(value):
+    return max(0, math.floor(to_float(value, 0.0) + 0.5))
 
 
 def get_rainfall_category(rainfall):
@@ -139,7 +144,7 @@ def calculate_water(rainfall, roof_area, roof_type):
     rainfall = max(0.0, to_float(rainfall, 0.0))
     roof_area = clamp(to_float(roof_area, 0.0), 0.0, MAX_ROOF_AREA_M2)
     coefficient = ROOF_COEFFICIENTS.get(roof_type, 0.80)
-    water_litres = roof_area * rainfall * coefficient
+    water_litres = roof_area * rainfall * coefficient * COLLECTION_EFFICIENCY
     category, method, storage, scale = get_recommendation(rainfall, water_litres)
 
     return {
@@ -149,6 +154,7 @@ def calculate_water(rainfall, roof_area, roof_type):
         "area": roof_area,
         "roof_type": roof_type,
         "coefficient": coefficient,
+        "efficiency": COLLECTION_EFFICIENCY,
         "category": category,
         "method": method,
         "storage": storage,
@@ -187,7 +193,7 @@ def home():
         )
         rainfall = district_rainfall
 
-        roof_area = to_float(request.form.get("roof_area", 100), 100.0)
+        roof_area = round_roof_area(request.form.get("roof_area", 100))
         roof_area_display = roof_area
        
         area_unit = request.form.get("area_unit", "m2")
@@ -254,7 +260,7 @@ def calculator():
         )
         rainfall = district_rainfall
 
-        roof_area = to_float(request.form.get("roof_area", 100), 100.0)
+        roof_area = round_roof_area(request.form.get("roof_area", 100))
         roof_area_display = roof_area
 
         area_unit = request.form.get("area_unit", "m2")
