@@ -88,10 +88,6 @@ def clamp(value, min_value, max_value):
     return max(min_value, min(value, max_value))
 
 
-def round_roof_area(value):
-    return max(0, math.floor(to_float(value, 0.0) + 0.5))
-
-
 def get_rainfall_category(rainfall):
     if rainfall <= 0:
         return "No rainfall data"
@@ -193,7 +189,7 @@ def home():
         )
         rainfall = district_rainfall
 
-        roof_area = round_roof_area(request.form.get("roof_area", 100))
+        roof_area = to_float(request.form.get("roof_area", 100), 100.0)
         roof_area_display = roof_area
        
         area_unit = request.form.get("area_unit", "m2")
@@ -260,7 +256,7 @@ def calculator():
         )
         rainfall = district_rainfall
 
-        roof_area = round_roof_area(request.form.get("roof_area", 100))
+        roof_area = to_float(request.form.get("roof_area", 100), 100.0)
         roof_area_display = roof_area
 
         area_unit = request.form.get("area_unit", "m2")
