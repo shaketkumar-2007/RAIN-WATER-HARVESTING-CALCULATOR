@@ -674,6 +674,205 @@ body {
 }
 
 
+.model-stage {
+    position: absolute;
+    inset: 74px 24px 142px;
+    z-index: 0;
+    perspective: 700px;
+    transform-style: preserve-3d;
+    pointer-events: none;
+}
+
+
+.model-ground {
+    position: absolute;
+    left: 4%;
+    right: 4%;
+    bottom: 3%;
+    height: 58%;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.12), rgba(3, 19, 13, 0.72));
+    box-shadow: inset 0 0 28px rgba(0, 255, 136, 0.08), 0 0 34px rgba(0, 255, 136, 0.08);
+    transform: rotateX(64deg) rotateZ(-8deg);
+    animation: model-ground-float 6s ease-in-out infinite;
+}
+
+
+.model-house {
+    position: absolute;
+    left: 11%;
+    bottom: 27%;
+    width: 112px;
+    height: 82px;
+    transform: translateZ(24px) rotateY(-12deg);
+    transform-style: preserve-3d;
+    animation: model-house-float 5s ease-in-out infinite;
+}
+
+
+.model-wall {
+    position: absolute;
+    inset: 24px 10px 0;
+    border: 1px solid rgba(174, 255, 220, 0.58);
+    background: linear-gradient(135deg, #173e2c, #0a2117);
+    box-shadow: 12px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+
+.model-roof {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 82px;
+    height: 58px;
+    border: 1px solid rgba(174, 255, 220, 0.8);
+    border-right: 0;
+    background: linear-gradient(135deg, #36b987, #0b4d34);
+    clip-path: polygon(50% 0, 100% 42%, 100% 58%, 50% 17%, 0 58%, 0 42%);
+    transform: translateZ(12px);
+}
+
+
+.model-window {
+    position: absolute;
+    left: 42px;
+    top: 42px;
+    width: 24px;
+    height: 22px;
+    border: 1px solid var(--accent);
+    background: rgba(0, 255, 136, 0.24);
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.2);
+}
+
+
+.model-pipe {
+    position: absolute;
+    left: 46%;
+    bottom: 38%;
+    width: 78px;
+    height: 42px;
+    border-right: 3px solid var(--accent);
+    border-bottom: 3px solid var(--accent);
+    border-radius: 0 0 18px 0;
+    transform: translateZ(28px) rotateY(-9deg);
+    filter: drop-shadow(0 0 5px rgba(0, 255, 136, 0.45));
+}
+
+
+.model-reservoir {
+    position: absolute;
+    right: 9%;
+    bottom: 22%;
+    width: 78px;
+    height: 105px;
+    overflow: hidden;
+    border: 1px solid rgba(185, 255, 225, 0.8);
+    border-radius: 18px 18px 13px 13px;
+    background: linear-gradient(90deg, #0a4e37, #1b9869 45%, #0a4e37);
+    box-shadow: 10px 12px 0 rgba(0, 0, 0, 0.2), 0 0 24px rgba(0, 255, 136, 0.16);
+    transform: translateZ(34px) rotateY(-15deg);
+    animation: model-tank-float 4.5s ease-in-out infinite;
+}
+
+
+.model-reservoir-lid {
+    position: absolute;
+    top: -8px;
+    left: 8px;
+    width: 60px;
+    height: 20px;
+    border: 1px solid rgba(185, 255, 225, 0.9);
+    border-radius: 50%;
+    background: #0b5d40;
+}
+
+
+.model-reservoir-water {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(0, 255, 170, 0.82), rgba(0, 106, 76, 0.96));
+    animation: model-water-wave 3s ease-in-out infinite;
+}
+
+
+.model-orbit {
+    position: absolute;
+    left: 7%;
+    right: 5%;
+    bottom: 15%;
+    height: 48%;
+    border: 1px solid rgba(98, 185, 232, 0.26);
+    border-radius: 50%;
+    transform: rotateX(68deg) rotateZ(12deg);
+    animation: model-orbit-spin 9s linear infinite;
+}
+
+
+.model-droplet {
+    position: absolute;
+    z-index: 3;
+    color: #62b9e8;
+    font-size: 14px;
+    text-shadow: 0 0 12px rgba(98, 185, 232, 0.9);
+    animation: model-drop-fall 2.8s ease-in infinite;
+}
+
+
+.droplet-one {
+    left: 31%;
+    top: 5%;
+}
+
+
+.droplet-two {
+    left: 56%;
+    top: -3%;
+    animation-delay: 1.25s;
+    font-size: 9px;
+}
+
+
+@keyframes model-ground-float {
+    0%, 100% { transform: rotateX(64deg) rotateZ(-8deg) translateY(0); }
+    50% { transform: rotateX(64deg) rotateZ(-8deg) translateY(-5px); }
+}
+
+
+@keyframes model-house-float {
+    0%, 100% { transform: translateZ(24px) rotateY(-12deg) translateY(0); }
+    50% { transform: translateZ(24px) rotateY(-12deg) translateY(-7px); }
+}
+
+
+@keyframes model-tank-float {
+    0%, 100% { transform: translateZ(34px) rotateY(-15deg) translateY(0); }
+    50% { transform: translateZ(34px) rotateY(-15deg) translateY(-9px); }
+}
+
+
+@keyframes model-water-wave {
+    0%, 100% { transform: translateX(-4%) skewX(-3deg); }
+    50% { transform: translateX(4%) skewX(3deg); }
+}
+
+
+@keyframes model-orbit-spin {
+    from { transform: rotateX(68deg) rotateZ(12deg); }
+    to { transform: rotateX(68deg) rotateZ(372deg); }
+}
+
+
+@keyframes model-drop-fall {
+    0% { opacity: 0; transform: translateY(-8px) scale(0.7); }
+    20%, 70% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(175px) scale(1); }
+}
+
+
 .showcase-topline,
 .showcase-stats,
 .showcase-route {
