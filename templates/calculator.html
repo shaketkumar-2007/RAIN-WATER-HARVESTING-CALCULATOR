@@ -65,7 +65,7 @@
 
             <div class="live-status">
                 <span class="live-dot"></span>
-                LIVE RAIN SIMULATION
+                INTERACTIVE RAIN SIMULATION
             </div>
 
         </header>
@@ -79,73 +79,82 @@
             <div class="hero-content">
 
                 <div class="small-title">
+                    <span class="eyebrow-dot"></span>
                     SMART WATER MANAGEMENT
                 </div>
 
                 <h1 id="calculator-title">
-                    RAINWATER
-                    <span>HARVESTING</span>
-                    CALCULATOR
+                    Calculate Your
+                    <span>Rainwater Harvesting</span>
+                    Potential
                 </h1>
 
-                <p>
-                    Calculate how much rainwater your roof can collect
-                    and discover the most suitable harvesting system
-                    for your location.
+                <p class="hero-lead">
+                    Find out how much water your roof can collect using your location,
+                    roof area and roof type.
                 </p>
 
-                <div class="rain-info">
+                <div class="cta-row">
+                    <a class="primary-btn" href="#calculator">Calculate My Water</a>
+                    <a class="secondary-btn" href="/">Back to home</a>
+                </div>
 
-                    <div class="rain-info-item">
+                <div class="hero-summary" aria-label="Quick estimate summary">
+                    <div class="hero-summary-item">
                         <span class="info-label">RAIN INTENSITY</span>
-                        <span id="rainStatus">MODERATE</span>
+                        <strong id="rainStatus">MODERATE</strong>
                     </div>
 
-                    <div class="rain-info-item">
+                    <div class="hero-summary-item">
                         <span class="info-label">ROOF AREA</span>
-                        <span id="areaStatus">100 m²</span>
+                        <strong id="areaStatus">100 m²</strong>
                     </div>
-
                 </div>
 
             </div>
 
-            <div class="hero-showcase" aria-label="RainHarvest Pro system preview">
-            <div class="model-stage" aria-hidden="true">
-                <div class="model-orbit"></div>
-                <div class="model-droplet droplet-one">●</div>
-                <div class="model-droplet droplet-two">●</div>
-                <div class="model-house">
-                    <div class="model-roof"></div>
-                    <div class="model-wall"></div>
-                    <div class="model-window"></div>
+            <div class="hero-showcase hero-showcase--compact" aria-label="RainHarvest Pro system preview">
+                <div class="model-stage" aria-hidden="true">
+                    <div class="model-orbit"></div>
+                    <div class="model-droplet droplet-one">●</div>
+                    <div class="model-droplet droplet-two">●</div>
+                    <div class="model-house">
+                        <div class="model-roof"></div>
+                        <div class="model-wall"></div>
+                        <div class="model-window"></div>
+                    </div>
+                    <div class="model-pipe"></div>
+                    <div class="model-reservoir">
+                        <div class="model-reservoir-lid"></div>
+                        <div class="model-reservoir-water"></div>
+                    </div>
+                    <div class="model-ground"></div>
                 </div>
-                <div class="model-pipe"></div>
-                <div class="model-reservoir">
-                    <div class="model-reservoir-lid"></div>
-                    <div class="model-reservoir-water"></div>
+                <div class="showcase-glow"></div>
+                <div class="showcase-summary">
+                    <span>ANNUAL YIELD</span>
+                    <strong>1,480 L</strong>
+                    <small>Based on 100 m² roof area</small>
                 </div>
-                <div class="model-ground"></div>
-            </div>
-            <div class="showcase-topline">
-                <span>LIVE SYSTEM PREVIEW</span>
-                <span class="showcase-live">● ACTIVE</span>
-            </div>
-            <div class="showcase-tank">
-                <div class="tank-water"></div>
-                <div class="tank-label">RAIN<br>RESERVE</div>
-                <div class="tank-value"><span id="previewLevel">0</span><span>%</span></div>
-            </div>
-            <div class="showcase-stats">
-                <div>
-                    <span>RUNOFF READY</span>
-                    <strong id="previewRunoff">0 L</strong>
+                <div class="showcase-topline" hidden>
+                    <span>CURRENT SYSTEM SIMULATION</span>
+                    <span class="showcase-live">● ACTIVE</span>
                 </div>
-                <div>
-                    <span>EFFICIENCY</span>
-                    <strong id="previewEfficiency">0%</strong>
+                <div class="showcase-tank">
+                    <div class="tank-water"></div>
+                    <div class="tank-label">RAIN<br>RESERVE</div>
+                    <div class="tank-value"><span id="previewLevel">0</span><span>%</span></div>
                 </div>
-            </div>
+                <div class="showcase-stats" hidden>
+                    <div>
+                        <span>RUNOFF READY</span>
+                        <strong id="previewRunoff">0 L</strong>
+                    </div>
+                    <div>
+                        <span>EFFICIENCY</span>
+                        <strong id="previewEfficiency">0%</strong>
+                    </div>
+                </div>
             </div>
 
         </section>
@@ -153,9 +162,26 @@
 
         <!-- CALCULATOR -->
 
-        <section class="calculator-section">
+        <section class="calculator-section {% if result %}has-result{% endif %}">
 
             <div class="calculator-card">
+
+                <div class="wizard-heading">
+                    <div class="wizard-step {% if result %}is-complete{% else %}is-active{% endif %}" data-step-indicator="1">
+                        <span>01</span>
+                        <strong>LOCATION</strong>
+                    </div>
+                    <div class="wizard-connector"></div>
+                    <div class="wizard-step {% if result %}is-complete{% endif %}" data-step-indicator="2">
+                        <span>02</span>
+                        <strong>ROOF DETAILS</strong>
+                    </div>
+                    <div class="wizard-connector"></div>
+                    <div class="wizard-step {% if result %}is-active{% endif %}" data-step-indicator="3">
+                        <span>03</span>
+                        <strong>YOUR RESULT</strong>
+                    </div>
+                </div>
 
                 <div class="card-heading">
 
@@ -183,6 +209,13 @@
                         {{ error_message }}
                     </div>
                     {% endif %}
+
+                    <div class="wizard-panel is-active" data-step="1">
+                        <div class="wizard-panel-heading">
+                            <div class="section-number">01 / LOCATION</div>
+                            <h3>Where is your building?</h3>
+                            <p>Choose your location so we can estimate the annual rainfall.</p>
+                        </div>
 
                     <!-- STATE -->
 
@@ -269,6 +302,18 @@
 
                     </div>
 
+                    <button type="button" class="wizard-next" data-next-step="2">
+                        <span>Continue to roof details</span>
+                        <span class="arrow">→</span>
+                    </button>
+                    </div>
+
+                    <div class="wizard-panel" data-step="2">
+                        <div class="wizard-panel-heading">
+                            <div class="section-number">02 / ROOF DETAILS</div>
+                            <h3>Tell us about your roof</h3>
+                            <p>These details make your water estimate more useful.</p>
+                        </div>
 
                     <!-- ROOF AREA -->
 
@@ -347,6 +392,14 @@
 
                     </div>
 
+                    <div class="roof-preview" aria-hidden="true">
+                        <div class="roof-preview-icon">⌂</div>
+                        <div>
+                            <strong>Roof catchment preview</strong>
+                            <span>More roof area means more collected water.</span>
+                        </div>
+                    </div>
+
 
                     <!-- BUTTON -->
 
@@ -362,6 +415,9 @@
 
                     </button>
 
+                    <button type="button" class="wizard-back" data-previous-step="1">← Back to location</button>
+                    </div>
+
                 </form>
 
             </div>
@@ -373,7 +429,7 @@
 
             {% if result %}
 
-            <div class="result-card">
+            <div class="result-card result-dashboard" id="result">
 
                 <div class="result-top">
 
@@ -408,11 +464,48 @@
                     <div class="water-unit">
                         {% if water_unit == "m3" %}CUBIC METRES / YEAR{% else %}LITRES / YEAR{% endif %}
                     </div>
+                    <div class="water-average">
+                        ≈ {{ (result.water / 365) | round(0) | int }} L/day average
+                    </div>
 
                 </div>
 
                 <div class="result-note">
                     District values are planning estimates, not live weather data.
+                </div>
+
+                <div class="result-actions">
+                    <a class="calculate-again" href="/calculator">Calculate again</a>
+                    <button class="share-result" type="button" onclick="shareResult()">Share result</button>
+                </div>
+
+                <div class="system-flow" aria-label="Recommended rainwater harvesting flow">
+                    <div class="recommendation-title">YOUR RECOMMENDED SYSTEM</div>
+                    <div class="flow-diagram">
+                        <div class="flow-rain" aria-hidden="true">
+                            <span>🌧️</span>
+                            <i></i><i></i><i></i>
+                        </div>
+                        <div class="flow-node">
+                            <span>⌂</span>
+                            <strong>ROOF</strong>
+                        </div>
+                        <div class="flow-pipe"><b></b></div>
+                        <div class="flow-node">
+                            <span>≋</span>
+                            <strong>FILTER</strong>
+                        </div>
+                        <div class="flow-pipe"><b></b></div>
+                        <div class="flow-node">
+                            <span class="tank-node-icon">💧</span>
+                            <strong>TANK</strong>
+                        </div>
+                        <div class="flow-pipe"><b></b></div>
+                        <div class="flow-node">
+                            <span>🌱</span>
+                            <strong>RECHARGE</strong>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- RESULT GRID -->
@@ -884,6 +977,53 @@
                 ideaIndex += 1;
                 ideaList.innerHTML = "";
                 ideaList.appendChild(item);
+        }
+
+        function setWizardStep(step) {
+            document.querySelectorAll(".wizard-panel").forEach(panel => {
+                panel.classList.toggle("is-active", panel.dataset.step === String(step));
+            });
+            document.querySelectorAll("[data-step-indicator]").forEach(indicator => {
+                const indicatorStep = Number(indicator.dataset.stepIndicator);
+                indicator.classList.toggle("is-active", indicatorStep === step);
+                indicator.classList.toggle("is-complete", indicatorStep < step);
+            });
+        }
+
+        document.querySelectorAll("[data-next-step]").forEach(button => {
+            button.addEventListener("click", () => {
+                const stateSelect = document.getElementById("state");
+                if (!stateSelect.value) {
+                    stateSelect.focus();
+                    stateSelect.setCustomValidity("Choose a state to continue.");
+                    stateSelect.reportValidity();
+                    return;
+                }
+                stateSelect.setCustomValidity("");
+                setWizardStep(Number(button.dataset.nextStep));
+                document.querySelector("[data-step='2'] input, [data-step='2'] select").focus();
+            });
+        });
+
+        document.querySelectorAll("[data-previous-step]").forEach(button => {
+            button.addEventListener("click", () => setWizardStep(Number(button.dataset.previousStep)));
+        });
+
+        function shareResult() {
+            const shareText = `My RainHarvest Pro estimate is ${document.querySelector(".water-number").textContent.trim()} ${document.querySelector(".water-unit").textContent.trim().toLowerCase()}.`;
+            if (navigator.share) {
+                navigator.share({ title: "My rainwater harvesting estimate", text: shareText, url: window.location.href });
+                return;
+            }
+            navigator.clipboard.writeText(`${shareText} ${window.location.href}`)
+                .then(() => {
+                    const button = document.querySelector(".share-result");
+                    button.textContent = "Copied";
+                    window.setTimeout(() => { button.textContent = "Share result"; }, 1800);
+                })
+                .catch(() => {
+                    window.prompt("Copy your result link:", window.location.href);
+                });
         }
 
         function createDrops() {
