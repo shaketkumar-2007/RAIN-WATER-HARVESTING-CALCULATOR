@@ -13,19 +13,29 @@
     <canvas id="rainCanvas"></canvas>
     <div class="rain-overlay"></div>
 
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Open color settings" aria-expanded="false">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Open theme settings" aria-expanded="false">
         <span class="theme-toggle-swatch"></span>
-        <span class="theme-toggle-label">Colors</span>
+        <span class="theme-toggle-label">Theme</span>
     </button>
 
     <div class="theme-panel" id="themePanel" aria-label="Theme controls" hidden>
+        <div class="theme-panel-heading">
+            <strong>🎨 Customize Theme</strong>
+            <span>Make the calculator yours</span>
+        </div>
+        <div class="theme-presets" aria-label="Theme presets">
+            <button type="button" class="theme-preset" data-bg="#0b302d" data-accent="#69d7b4"><span class="preset-swatch eco-swatch"></span>Deep Teal</button>
+            <button type="button" class="theme-preset" data-bg="#10423c" data-accent="#69bfe8"><span class="preset-swatch water-swatch"></span>Water Teal</button>
+            <button type="button" class="theme-preset" data-bg="#153b38" data-accent="#9aecd0"><span class="preset-swatch dark-swatch"></span>Soft Mint</button>
+        </div>
+        <div class="theme-custom-label">Custom</div>
         <label>
             <span>Background</span>
-            <input type="color" id="bgColor" value="#07100d" aria-label="Choose background color">
+            <input type="color" id="bgColor" value="#0b302d" aria-label="Choose background color">
         </label>
         <label>
             <span>Accent</span>
-            <input type="color" id="accentColor" value="#66d39a" aria-label="Choose accent color">
+            <input type="color" id="accentColor" value="#69d7b4" aria-label="Choose accent color">
         </label>
     </div>
 
@@ -166,7 +176,7 @@
             root.style.setProperty('--accent', accent);
             root.style.setProperty('--accent-soft', adjustColor(accent, 28));
             root.style.setProperty('--accent-strong', accent);
-            sessionStorage.setItem('rainharvest-theme', JSON.stringify({ bg, accent }));
+            sessionStorage.setItem('rainharvest-theme-v3', JSON.stringify({ bg, accent }));
         }
 
         function adjustColor(hex, amount) {
@@ -178,7 +188,7 @@
             return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
         }
 
-        const savedTheme = JSON.parse(sessionStorage.getItem('rainharvest-theme') || '{}');
+        const savedTheme = JSON.parse(sessionStorage.getItem('rainharvest-theme-v3') || '{}');
         if (savedTheme.bg && savedTheme.accent) {
             bgColorInput.value = savedTheme.bg;
             accentColorInput.value = savedTheme.accent;
@@ -188,6 +198,13 @@
 
         bgColorInput.addEventListener('input', (event) => applyTheme(event.target.value, accentColorInput.value));
         accentColorInput.addEventListener('input', (event) => applyTheme(bgColorInput.value, event.target.value));
+        document.querySelectorAll('.theme-preset').forEach((preset) => {
+            preset.addEventListener('click', () => {
+                bgColorInput.value = preset.dataset.bg;
+                accentColorInput.value = preset.dataset.accent;
+                applyTheme(bgColorInput.value, accentColorInput.value);
+            });
+        });
 
         themeToggle.addEventListener('click', () => {
             const isOpen = !themePanel.hidden;

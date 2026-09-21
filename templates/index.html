@@ -24,19 +24,29 @@
     <!-- Dark overlay -->
     <div class="rain-overlay"></div>
 
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Open color settings" aria-expanded="false">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Open theme settings" aria-expanded="false">
         <span class="theme-toggle-swatch"></span>
-        <span class="theme-toggle-label">Colors</span>
+        <span class="theme-toggle-label">Theme</span>
     </button>
 
     <div class="theme-panel" id="themePanel" aria-label="Theme controls" hidden>
+        <div class="theme-panel-heading">
+            <strong>🎨 Customize Theme</strong>
+            <span>Make the calculator yours</span>
+        </div>
+        <div class="theme-presets" aria-label="Theme presets">
+            <button type="button" class="theme-preset" data-bg="#0b302d" data-accent="#69d7b4"><span class="preset-swatch eco-swatch"></span>Deep Teal</button>
+            <button type="button" class="theme-preset" data-bg="#10423c" data-accent="#69bfe8"><span class="preset-swatch water-swatch"></span>Water Teal</button>
+            <button type="button" class="theme-preset" data-bg="#153b38" data-accent="#9aecd0"><span class="preset-swatch dark-swatch"></span>Soft Mint</button>
+        </div>
+        <div class="theme-custom-label">Custom</div>
         <label>
             <span>Background</span>
-            <input type="color" id="bgColor" value="#07100d" aria-label="Choose background color">
+            <input type="color" id="bgColor" value="#0b302d" aria-label="Choose background color">
         </label>
         <label>
             <span>Accent</span>
-            <input type="color" id="accentColor" value="#66d39a" aria-label="Choose accent color">
+            <input type="color" id="accentColor" value="#69d7b4" aria-label="Choose accent color">
         </label>
     </div>
 
@@ -132,19 +142,30 @@
                     <div class="model-ground"></div>
                 </div>
                 <div class="showcase-glow"></div>
-                <div class="showcase-summary">
-                    <span>ANNUAL YIELD</span>
-                    <strong>1,480 L</strong>
-                    <small>Based on 100 m² roof area</small>
+                <div class="showcase-summary {% if not result %}showcase-summary--empty{% endif %}">
+                    {% if result %}
+                    <span>ESTIMATED ANNUAL COLLECTION</span>
+                    <strong>{{ result.water | round(0) | int | string | replace(",", ",") }} L</strong>
+                    <small>Based on your selected location and roof details</small>
+                    {% else %}
+                    <span>YOUR ESTIMATE</span>
+                    <strong>Ready when you are</strong>
+                    <small>Enter your roof details to see your estimated annual water collection.</small>
+                    {% endif %}
                 </div>
                 <div class="showcase-topline" hidden>
                     <span>CURRENT SYSTEM SIMULATION</span>
                     <span class="showcase-live">● ACTIVE</span>
                 </div>
-                <div class="showcase-tank">
+                <div class="showcase-tank" {% if not result %}aria-label="Your result will appear after calculation"{% endif %}>
                     <div class="tank-water"></div>
+                    {% if result %}
                     <div class="tank-label">RAIN<br>RESERVE</div>
                     <div class="tank-value"><span id="previewLevel">0</span><span>%</span></div>
+                    {% else %}
+                    <div class="tank-label">RAIN<br>RESERVE</div>
+                    <div class="tank-value tank-value--empty"><span id="previewLevel">—</span></div>
+                    {% endif %}
                 </div>
                 <div class="showcase-stats" hidden>
                     <div>
@@ -169,16 +190,16 @@
 
         <section class="proof-strip" aria-label="RainHarvest Pro highlights">
             <div class="proof-item">
-                <strong>💧 100 m²</strong>
-                <span>example catchment area</span>
+                <strong>💧 Estimated water</strong>
+                <span>Your annual collection</span>
             </div>
             <div class="proof-item">
-                <strong>🌧️ 650 mm</strong>
-                <span>example annual rainfall</span>
+                <strong>🌧️ Annual rainfall</strong>
+                <span>Based on your locality</span>
             </div>
             <div class="proof-item">
-                <strong>♻️ 70–90%</strong>
-                <span>runoff efficiency range</span>
+                <strong>🏠 Roof area</strong>
+                <span>Your catchment surface</span>
             </div>
             <div class="proof-caption">
                 <span class="info-label">WHY THESE NUMBERS MATTER</span>
@@ -737,7 +758,7 @@
         <section class="feature-section" id="benefits">
 
             <div class="section-heading">
-                <div class="section-number">05 / BENEFITS</div>
+                <div class="section-number">04 / BENEFITS</div>
                 <h2>Why rainwater harvesting matters</h2>
             </div>
 
@@ -835,6 +856,7 @@
 
         let rainfall = Number(rainfallInput.value) || 0;
         let roofArea = Number(areaInput.value) || 0;
+        let areaEdited = {{ "true" if result else "false" }};
 
         let targetDrops = 120;
         const homeIntensityRainfall = {
@@ -867,10 +889,10 @@
             root.style.setProperty('--panel', adjustColor(bg, 18));
             root.style.setProperty('--accent', accent);
             root.style.setProperty('--accent-soft', adjustColor(accent, 28));
-            sessionStorage.setItem('rainharvest-theme', JSON.stringify({ bg, accent }));
+            sessionStorage.setItem('rainharvest-theme-v3', JSON.stringify({ bg, accent }));
         }
 
-        const savedTheme = JSON.parse(sessionStorage.getItem('rainharvest-theme') || '{}');
+        const savedTheme = JSON.parse(sessionStorage.getItem('rainharvest-theme-v3') || '{}');
         if (savedTheme.bg && savedTheme.accent) {
             bgColorInput.value = savedTheme.bg;
             accentColorInput.value = savedTheme.accent;
@@ -879,6 +901,13 @@
         applyTheme(bgColorInput.value, accentColorInput.value);
         bgColorInput.addEventListener('input', (event) => applyTheme(event.target.value, accentColorInput.value));
         accentColorInput.addEventListener('input', (event) => applyTheme(bgColorInput.value, event.target.value));
+        document.querySelectorAll('.theme-preset').forEach((preset) => {
+            preset.addEventListener('click', () => {
+                bgColorInput.value = preset.dataset.bg;
+                accentColorInput.value = preset.dataset.accent;
+                applyTheme(bgColorInput.value, accentColorInput.value);
+            });
+        });
 
         themeToggle.addEventListener("click", () => {
             const isOpen = !themePanel.hidden;
@@ -980,6 +1009,11 @@
                 : Math.round(runoffLitres).toLocaleString() + " L";
             previewEfficiency.textContent = rainfall > 0 ? Math.round(coefficient * 100) + "%" : "0%";
             tankWater.style.height = Math.max(8, level) + "%";
+            if (!areaEdited && rainfall <= 0) {
+                previewLevel.textContent = "—";
+                previewRunoff.textContent = "—";
+                previewEfficiency.textContent = "—";
+            }
             if (!monthlyEstimate) return;
             monthlyEstimate.textContent = formatEstimate(monthly);
             dryEstimate.textContent = formatEstimate(dry);

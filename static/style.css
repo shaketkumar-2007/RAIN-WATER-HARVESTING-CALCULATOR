@@ -10,19 +10,19 @@
 
 
 :root {
-    --bg: #07100d;
-    --bg-alt: #0d1d17;
-    --panel: rgba(12, 25, 20, 0.86);
-    --text: #ffffff;
-    --muted: #a5aaa7;
-    --accent: #66d39a;
-    --accent-soft: rgba(102, 211, 154, 0.12);
-    --accent-strong: #66d39a;
-    --water-blue: #62b9e8;
-    --danger: #ff3131;
-    --card-shadow: rgba(0, 0, 0, 0.45);
+    --bg: #fbf7ef;
+    --bg-alt: #f2eee5;
+    --panel: rgba(255, 255, 255, 0.9);
+    --text: #16324a;
+    --muted: #607487;
+    --accent: #2477b8;
+    --accent-soft: rgba(36, 119, 184, 0.12);
+    --accent-strong: #17649e;
+    --water-blue: #2477b8;
+    --danger: #c84d4d;
+    --card-shadow: rgba(34, 63, 84, 0.14);
     --content-width: 1200px;
-    --focus-ring: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 0 6px var(--water-blue);
+    --focus-ring: 0 0 0 3px #ffffff, 0 0 0 6px var(--water-blue);
 }
 
 
@@ -127,11 +127,7 @@ body {
 
     pointer-events: none;
 
-    background:
-        linear-gradient(
-            rgba(0, 0, 0, 0.48),
-            rgba(0, 0, 0, 0.82)
-        );
+    background: linear-gradient(rgba(251, 247, 239, 0.72), rgba(251, 247, 239, 0.9));
 }
 
 
@@ -149,13 +145,13 @@ body {
     width: 48px;
     height: 48px;
     padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(36, 119, 184, 0.24);
     border-radius: 999px;
-    background: rgba(8, 14, 12, 0.9);
+    background: rgba(255, 255, 255, 0.92);
     color: var(--text);
     cursor: pointer;
     backdrop-filter: blur(12px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 24px rgba(34, 63, 84, 0.14);
     transition: transform 0.2s ease, border-color 0.2s ease;
     isolation: isolate;
 }
@@ -194,15 +190,77 @@ body {
     display: flex;
     gap: 12px;
     flex-direction: column;
-    min-width: 170px;
-    padding: 15px 13px;
-    background: rgba(8, 14, 12, 0.94);
+    min-width: 260px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.97);
     border: 1px solid var(--accent);
     border-radius: 12px;
     backdrop-filter: blur(12px);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 14px 30px rgba(34, 63, 84, 0.16);
     animation: theme-panel-in 0.18s ease-out;
     isolation: isolate;
+}
+
+.theme-panel-heading {
+    display: grid;
+    gap: 4px;
+    margin-bottom: 14px;
+}
+
+.theme-panel-heading strong {
+    color: var(--text);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.theme-panel-heading span,
+.theme-custom-label {
+    color: #8f9b94;
+    font-size: 10px;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+}
+
+.theme-presets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-bottom: 16px;
+}
+
+.theme-preset {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    padding: 8px 4px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #dce9e1;
+    cursor: pointer;
+    font-size: 9px;
+    line-height: 1.2;
+}
+
+.theme-preset:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.preset-swatch {
+    width: 22px;
+    height: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
+}
+
+.eco-swatch { background: linear-gradient(135deg, #66d39a 0 50%, #07100d 50%); }
+.water-swatch { background: linear-gradient(135deg, #62b9e8 0 50%, #07111a 50%); }
+.dark-swatch { background: linear-gradient(135deg, #c5a8ff 0 50%, #11121a 50%); }
+
+.theme-custom-label {
+    margin-bottom: 9px;
 }
 
 
@@ -633,6 +691,19 @@ body {
     font-size: clamp(28px, 4vw, 42px);
     line-height: 1;
     letter-spacing: -0.05em;
+}
+
+.showcase-summary--empty strong {
+    font-size: clamp(22px, 3vw, 30px);
+    letter-spacing: -0.03em;
+}
+
+.showcase-summary--empty small {
+    max-width: 290px;
+}
+
+.tank-value--empty {
+    color: #9aa79f;
 }
 
 
@@ -1321,8 +1392,10 @@ body {
 }
 
 .result-dashboard .water-number {
-    font-size: clamp(52px, 7vw, 84px);
+    color: #c8ffe0;
+    font-size: clamp(64px, 9vw, 108px);
     letter-spacing: -0.06em;
+    text-shadow: 0 0 34px rgba(102, 211, 154, 0.2);
 }
 
 .result-dashboard .water-unit {
@@ -1330,6 +1403,41 @@ body {
     color: #c3ccc6;
     font-size: 12px;
     letter-spacing: 2px;
+}
+
+.empty-result-state {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 24px;
+    padding: 18px;
+    border: 1px dashed rgba(102, 211, 154, 0.35);
+    border-radius: 16px;
+    background: rgba(102, 211, 154, 0.05);
+}
+
+.empty-result-icon {
+    display: grid;
+    flex: 0 0 44px;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: var(--accent-soft);
+    font-size: 22px;
+}
+
+.empty-result-state strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #e7fff0;
+    font-size: 14px;
+}
+
+.empty-result-state p {
+    color: #9caaa1;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 .water-average {
@@ -2773,6 +2881,169 @@ footer {
     color: #657169;
 }
 
+/* Cream and water-blue visual system */
+.website {
+    color: var(--text);
+}
+
+.header,
+.hero-showcase,
+.calculator-card,
+.result-card,
+.info-card,
+.feature-card,
+.practical-card,
+.formula-card,
+.step-card,
+.education-section,
+.proof-strip,
+.info-banner,
+.estimate-panel,
+.recommendation-card,
+.system-flow,
+.result-facts,
+.calculation-card,
+.water-uses {
+    border-color: rgba(36, 119, 184, 0.18);
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 18px 40px var(--card-shadow);
+}
+
+.hero-showcase {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(235, 245, 250, 0.9));
+}
+
+.showcase-summary {
+    border-color: rgba(36, 119, 184, 0.18);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.showcase-summary span,
+.showcase-summary small {
+    color: #607487;
+}
+
+.showcase-summary strong {
+    color: #16324a;
+}
+
+.tank-water {
+    background: linear-gradient(180deg, rgba(86, 174, 224, 0.82), rgba(36, 119, 184, 0.96));
+}
+
+.model-ground {
+    border-color: rgba(36, 119, 184, 0.18);
+    background: linear-gradient(135deg, rgba(36, 119, 184, 0.12), rgba(220, 237, 246, 0.72));
+    box-shadow: inset 0 0 28px rgba(36, 119, 184, 0.08), 0 0 34px rgba(36, 119, 184, 0.08);
+}
+
+.calculator-card,
+.result-card {
+    background: rgba(255, 255, 255, 0.92);
+}
+
+.input-group input,
+.input-group select,
+.result-item {
+    border-color: #c9d9e5;
+    background: #ffffff;
+    color: var(--text);
+}
+
+.input-group select option {
+    background: #ffffff;
+    color: var(--text);
+}
+
+.card-heading h2,
+.result-top h2,
+.formula-card h2,
+.wizard-panel-heading h3,
+.section-heading h2,
+.education-copy h2,
+.practical-card h3,
+.feature-card h3,
+.info-card h3 {
+    color: #16324a;
+}
+
+.hero-lead,
+.education-copy p,
+.practical-card p,
+.feature-card p,
+.info-card p,
+.formula-card p,
+.result-section-heading p,
+.footer-disclaimer,
+.footer-brand span,
+.footer-links a {
+    color: #607487;
+}
+
+.section-number,
+.info-label,
+.recommendation-title {
+    color: var(--accent-strong);
+}
+
+.primary-btn,
+.calculate-btn,
+.back-to-top {
+    background: var(--accent);
+    color: #ffffff;
+}
+
+.secondary-btn,
+.calculate-again,
+.share-result {
+    border-color: rgba(36, 119, 184, 0.35);
+    color: var(--accent-strong);
+}
+
+.theme-panel-heading strong,
+.theme-preset,
+.theme-panel label,
+.footer-links strong,
+.footer-disclaimer strong {
+    color: #16324a;
+}
+
+.result-dashboard .water-result {
+    border-color: rgba(36, 119, 184, 0.24);
+    background: linear-gradient(145deg, rgba(36, 119, 184, 0.13), rgba(36, 119, 184, 0.035));
+}
+
+.result-dashboard .water-number,
+.water-number {
+    color: var(--accent-strong);
+    text-shadow: 0 0 34px rgba(36, 119, 184, 0.16);
+}
+
+.empty-result-state {
+    border-color: rgba(36, 119, 184, 0.35);
+    background: rgba(36, 119, 184, 0.06);
+}
+
+.empty-result-state strong {
+    color: #16324a;
+}
+
+.theme-preset:hover {
+    background: rgba(36, 119, 184, 0.1);
+}
+
+.eco-swatch {
+    background: linear-gradient(135deg, #2477b8 0 50%, #fbf7ef 50%);
+}
+
+.water-swatch {
+    background: linear-gradient(135deg, #56aee0 0 50%, #fbf7ef 50%);
+}
+
+.dark-swatch {
+    background: linear-gradient(135deg, #2477b8 0 50%, #e7eef3 50%);
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
@@ -2800,6 +3071,307 @@ footer {
 
     .estimate-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Teal layered interface */
+    :root {
+        --bg: #0b302d;
+        --bg-alt: #10423c;
+        --panel: rgba(18, 63, 56, 0.92);
+        --text: #f4fff9;
+        --muted: #a8c9bd;
+        --accent: #69d7b4;
+        --accent-soft: rgba(105, 215, 180, 0.14);
+        --accent-strong: #69d7b4;
+        --water-blue: #69bfe8;
+        --card-shadow: rgba(2, 20, 18, 0.34);
+    }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    .rain-overlay {
+        background: linear-gradient(rgba(5, 28, 26, 0.48), rgba(5, 28, 26, 0.78));
+    }
+
+    .header {
+        width: min(1120px, calc(100% - 32px));
+        margin: 18px auto 0;
+        padding: 12px 16px;
+        border: 1px solid rgba(143, 238, 207, 0.2);
+        border-radius: 999px;
+        background: rgba(11, 48, 45, 0.82);
+        box-shadow: 0 14px 32px rgba(2, 20, 18, 0.22);
+    }
+
+    .logo,
+    .top-nav a,
+    .live-status {
+        color: #f4fff9;
+    }
+
+    .top-nav {
+        padding: 5px;
+        border: 1px solid rgba(143, 238, 207, 0.13);
+        border-radius: 999px;
+        background: rgba(4, 31, 28, 0.48);
+    }
+
+    .top-nav a {
+        padding: 9px 12px;
+        border-radius: 999px;
+        font-size: 10px;
+    }
+
+    .top-nav a:hover,
+    .top-nav a[aria-current="page"] {
+        background: rgba(105, 215, 180, 0.15);
+        color: var(--accent);
+    }
+
+    .top-nav .nav-calculator {
+        background: var(--accent);
+        color: #07332d;
+        box-shadow: 0 8px 16px rgba(105, 215, 180, 0.16);
+    }
+
+    .top-nav .nav-calculator:hover {
+        color: #07332d;
+        background: #9aecd0;
+    }
+
+    .hero {
+        min-height: 70vh;
+    }
+
+    .small-title,
+    .section-number,
+    .info-label,
+    .recommendation-title {
+        color: var(--accent);
+    }
+
+    .hero h1,
+    .card-heading h2,
+    .result-top h2,
+    .formula-card h2,
+    .wizard-panel-heading h3,
+    .section-heading h2,
+    .education-copy h2,
+    .practical-card h3,
+    .feature-card h3,
+    .info-card h3 {
+        color: #f4fff9;
+    }
+
+    .hero h1 span {
+        color: var(--accent);
+    }
+
+    .hero-lead,
+    .education-copy p,
+    .practical-card p,
+    .feature-card p,
+    .info-card p,
+    .formula-card p,
+    .result-section-heading p,
+    .wizard-panel-heading p {
+        color: #b5d2c8;
+    }
+
+    .primary-btn,
+    .calculate-btn,
+    .back-to-top {
+        background: var(--accent);
+        color: #07332d;
+        box-shadow: 0 12px 24px rgba(105, 215, 180, 0.2), inset 0 -3px 0 rgba(3, 70, 58, 0.2);
+    }
+
+    .primary-btn:hover,
+    .calculate-btn:hover {
+        background: #9aecd0;
+        color: #07332d;
+    }
+
+    .secondary-btn {
+        border: 1px solid rgba(143, 238, 207, 0.28);
+        background: rgba(255, 255, 255, 0.06);
+        color: #e5fff4;
+    }
+
+    .hero-summary-item,
+    .proof-strip,
+    .hero-showcase,
+    .calculator-card,
+    .result-card,
+    .info-card,
+    .feature-card,
+    .practical-card,
+    .formula-card,
+    .step-card,
+    .education-section,
+    .info-banner,
+    .estimate-panel,
+    .recommendation-card,
+    .system-flow,
+    .result-facts,
+    .calculation-card,
+    .water-uses {
+        border: 1px solid rgba(143, 238, 207, 0.18);
+        border-radius: 28px;
+        background: rgba(18, 63, 56, 0.88);
+        box-shadow: 0 20px 44px var(--card-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .hero-showcase {
+        background: linear-gradient(145deg, rgba(23, 81, 71, 0.96), rgba(7, 39, 36, 0.94));
+    }
+
+    .showcase-summary {
+        border-color: rgba(143, 238, 207, 0.18);
+        background: rgba(7, 39, 36, 0.82);
+    }
+
+    .showcase-summary span,
+    .showcase-summary small {
+        color: #a8c9bd;
+    }
+
+    .showcase-summary strong {
+        color: #f4fff9;
+    }
+
+    .calculator-card,
+    .result-card {
+        background: rgba(13, 53, 47, 0.94);
+    }
+
+    .calculator-section {
+        gap: 28px;
+    }
+
+    .input-group input,
+    .input-group select {
+        border: 1px solid rgba(143, 238, 207, 0.18);
+        border-radius: 15px;
+        background: rgba(4, 30, 27, 0.58);
+        color: #f4fff9;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.13);
+    }
+
+    .input-group select option {
+        background: #123f38;
+        color: #f4fff9;
+    }
+
+    .wizard-step.is-active,
+    .wizard-step.is-complete {
+        color: var(--accent);
+    }
+
+    .wizard-step span {
+        border-color: rgba(143, 238, 207, 0.2);
+        background: rgba(105, 215, 180, 0.1);
+    }
+
+    .wizard-connector {
+        background: rgba(143, 238, 207, 0.2);
+    }
+
+    .empty-result-state {
+        border-color: rgba(105, 215, 180, 0.32);
+        border-radius: 20px;
+        background: rgba(105, 215, 180, 0.08);
+    }
+
+    .empty-result-state strong,
+    .result-item strong,
+    .flow-node strong {
+        color: #f4fff9;
+    }
+
+    .result-dashboard .water-result {
+        border-color: rgba(105, 215, 180, 0.3);
+        border-radius: 22px;
+        background: linear-gradient(145deg, rgba(105, 215, 180, 0.16), rgba(4, 35, 31, 0.35));
+    }
+
+    .result-dashboard .water-number,
+    .water-number {
+        color: #9aecd0;
+    }
+
+    .result-note,
+    .result-facts,
+    .calculation-card,
+    .water-uses,
+    .system-flow,
+    .recommendation-card,
+    .estimate-panel {
+        background: rgba(105, 215, 180, 0.06);
+    }
+
+    .result-item {
+        background: #103c35;
+    }
+
+    .flow-node span {
+        border-color: rgba(105, 215, 180, 0.32);
+        border-radius: 18px;
+        background: rgba(105, 215, 180, 0.1);
+    }
+
+    .flow-pipe {
+        background: linear-gradient(180deg, rgba(105, 215, 180, 0.2), var(--accent));
+    }
+
+    .theme-toggle {
+        border-color: rgba(143, 238, 207, 0.24);
+        background: rgba(11, 48, 45, 0.92);
+        color: #f4fff9;
+    }
+
+    .theme-panel {
+        border-color: rgba(105, 215, 180, 0.4);
+        border-radius: 22px;
+        background: rgba(13, 53, 47, 0.98);
+    }
+
+    .theme-panel-heading strong,
+    .theme-preset,
+    .theme-panel label {
+        color: #f4fff9;
+    }
+
+    .theme-preset {
+        border-color: rgba(143, 238, 207, 0.16);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .theme-preset:hover {
+        background: rgba(105, 215, 180, 0.14);
+    }
+
+    .eco-swatch {
+        background: linear-gradient(135deg, #69d7b4 0 50%, #0b302d 50%);
+    }
+
+    .water-swatch {
+        background: linear-gradient(135deg, #69bfe8 0 50%, #10423c 50%);
+    }
+
+    .dark-swatch {
+        background: linear-gradient(135deg, #9aecd0 0 50%, #153b38 50%);
+    }
+
+    .footer-links strong,
+    .footer-disclaimer strong,
+    .footer-brand span,
+    .footer-links a,
+    .footer-disclaimer {
+        color: #a8c9bd;
     }
 
     .water-use-grid {
@@ -2963,6 +3535,125 @@ footer {
             20px;
     }
 
+    /* Apply the layered teal system on larger screens as well. */
+    @media (min-width: 851px) {
+        :root {
+            --bg: #0b302d;
+            --bg-alt: #10423c;
+            --panel: rgba(18, 63, 56, 0.92);
+            --text: #f4fff9;
+            --muted: #a8c9bd;
+            --accent: #69d7b4;
+            --accent-soft: rgba(105, 215, 180, 0.14);
+            --accent-strong: #69d7b4;
+            --water-blue: #69bfe8;
+            --card-shadow: rgba(2, 20, 18, 0.34);
+        }
+
+        body { background: var(--bg); color: var(--text); }
+        .rain-overlay { background: linear-gradient(rgba(5, 28, 26, 0.48), rgba(5, 28, 26, 0.78)); }
+        .header {
+            width: min(1120px, calc(100% - 32px));
+            margin: 18px auto 0;
+            padding: 12px 16px;
+            border: 1px solid rgba(143, 238, 207, 0.2);
+            border-radius: 999px;
+            background: rgba(11, 48, 45, 0.82);
+            box-shadow: 0 14px 32px rgba(2, 20, 18, 0.22);
+        }
+        .top-nav {
+            padding: 5px;
+            border: 1px solid rgba(143, 238, 207, 0.13);
+            border-radius: 999px;
+            background: rgba(4, 31, 28, 0.48);
+        }
+        .top-nav a {
+            padding: 9px 12px;
+            border-radius: 999px;
+            color: #f4fff9;
+            font-size: 10px;
+        }
+        .top-nav a:hover,
+        .top-nav a[aria-current="page"] { background: rgba(105, 215, 180, 0.15); color: var(--accent); }
+        .top-nav .nav-calculator { background: var(--accent); color: #07332d; }
+        .hero h1,
+        .card-heading h2,
+        .result-top h2,
+        .formula-card h2,
+        .wizard-panel-heading h3,
+        .section-heading h2 { color: #f4fff9; }
+        .hero h1 span,
+        .section-number,
+        .small-title,
+        .info-label,
+        .recommendation-title { color: var(--accent); }
+        .hero-lead,
+        .wizard-panel-heading p { color: #b5d2c8; }
+        .primary-btn,
+        .calculate-btn,
+        .back-to-top { background: var(--accent); color: #07332d; }
+        .secondary-btn { border-color: rgba(143, 238, 207, 0.28); background: rgba(255, 255, 255, 0.06); color: #e5fff4; }
+        .hero-summary-item,
+        .hero-showcase,
+        .calculator-card,
+        .result-card,
+        .info-card,
+        .feature-card,
+        .practical-card,
+        .formula-card,
+        .step-card,
+        .education-section,
+        .proof-strip,
+        .info-banner,
+        .recommendation-card,
+        .system-flow,
+        .result-facts,
+        .calculation-card,
+        .water-uses {
+            border-color: rgba(143, 238, 207, 0.18);
+            border-radius: 28px;
+            background: rgba(18, 63, 56, 0.88);
+            box-shadow: 0 20px 44px var(--card-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        .hero-showcase { background: linear-gradient(145deg, rgba(23, 81, 71, 0.96), rgba(7, 39, 36, 0.94)); }
+        .showcase-summary { border-color: rgba(143, 238, 207, 0.18); background: rgba(7, 39, 36, 0.82); }
+        .showcase-summary span,
+        .showcase-summary small { color: #a8c9bd; }
+        .showcase-summary strong { color: #f4fff9; }
+        .calculator-card,
+        .result-card { background: rgba(13, 53, 47, 0.94); }
+        .input-group input,
+        .input-group select {
+            border-color: rgba(143, 238, 207, 0.18);
+            border-radius: 15px;
+            background: rgba(4, 30, 27, 0.58);
+            color: #f4fff9;
+        }
+        .input-group select option { background: #123f38; color: #f4fff9; }
+        .empty-result-state { border-color: rgba(105, 215, 180, 0.32); background: rgba(105, 215, 180, 0.08); }
+        .empty-result-state strong,
+        .result-item strong,
+        .flow-node strong { color: #f4fff9; }
+        .result-dashboard .water-result { border-color: rgba(105, 215, 180, 0.3); background: linear-gradient(145deg, rgba(105, 215, 180, 0.16), rgba(4, 35, 31, 0.35)); }
+        .result-dashboard .water-number,
+        .water-number { color: #9aecd0; }
+        .result-note,
+        .result-facts,
+        .calculation-card,
+        .water-uses,
+        .system-flow,
+        .recommendation-card,
+        .estimate-panel { background: rgba(105, 215, 180, 0.06); }
+        .result-item { background: #103c35; }
+        .flow-node span { border-color: rgba(105, 215, 180, 0.32); border-radius: 18px; background: rgba(105, 215, 180, 0.1); }
+        .flow-pipe { background: linear-gradient(180deg, rgba(105, 215, 180, 0.2), var(--accent)); }
+        .theme-toggle { border-color: rgba(143, 238, 207, 0.24); background: rgba(11, 48, 45, 0.92); color: #f4fff9; }
+        .theme-panel { border-color: rgba(105, 215, 180, 0.4); border-radius: 22px; background: rgba(13, 53, 47, 0.98); }
+        .theme-panel-heading strong,
+        .theme-preset,
+        .theme-panel label { color: #f4fff9; }
+    }
+
 
     .live-status {
 
@@ -3065,3 +3756,115 @@ footer {
     }
 
 }
+
+/* Global teal palette defaults */
+:root {
+    --bg: #0b302d;
+    --bg-alt: #10423c;
+    --panel: rgba(18, 63, 56, 0.92);
+    --text: #f4fff9;
+    --muted: #a8c9bd;
+    --accent: #69d7b4;
+    --accent-soft: rgba(105, 215, 180, 0.14);
+    --accent-strong: #69d7b4;
+    --water-blue: #69bfe8;
+    --card-shadow: rgba(2, 20, 18, 0.34);
+}
+
+body { background: var(--bg); color: var(--text); }
+.rain-overlay { background: linear-gradient(rgba(5, 28, 26, 0.48), rgba(5, 28, 26, 0.78)); }
+.header {
+    width: min(1120px, calc(100% - 32px));
+    margin: 18px auto 0;
+    padding: 12px 16px;
+    border: 1px solid rgba(143, 238, 207, 0.2);
+    border-radius: 999px;
+    background: rgba(11, 48, 45, 0.82);
+    box-shadow: 0 14px 32px rgba(2, 20, 18, 0.22);
+}
+.top-nav {
+    padding: 5px;
+    border: 1px solid rgba(143, 238, 207, 0.13);
+    border-radius: 999px;
+    background: rgba(4, 31, 28, 0.48);
+}
+.top-nav a { padding: 9px 12px; border-radius: 999px; color: #f4fff9; font-size: 10px; }
+.top-nav a:hover,
+.top-nav a[aria-current="page"] { background: rgba(105, 215, 180, 0.15); color: var(--accent); }
+.top-nav .nav-calculator { background: var(--accent); color: #07332d; }
+.hero h1,
+.card-heading h2,
+.result-top h2,
+.formula-card h2,
+.wizard-panel-heading h3,
+.section-heading h2 { color: #f4fff9; }
+.hero h1 span,
+.section-number,
+.small-title,
+.info-label,
+.recommendation-title { color: var(--accent); }
+.hero-lead,
+.wizard-panel-heading p { color: #b5d2c8; }
+.primary-btn,
+.calculate-btn,
+.back-to-top { background: var(--accent); color: #07332d; }
+.secondary-btn { border-color: rgba(143, 238, 207, 0.28); background: rgba(255, 255, 255, 0.06); color: #e5fff4; }
+.hero-summary-item,
+.hero-showcase,
+.calculator-card,
+.result-card,
+.info-card,
+.feature-card,
+.practical-card,
+.formula-card,
+.step-card,
+.education-section,
+.proof-strip,
+.info-banner,
+.recommendation-card,
+.system-flow,
+.result-facts,
+.calculation-card,
+.water-uses {
+    border-color: rgba(143, 238, 207, 0.18);
+    border-radius: 28px;
+    background: rgba(18, 63, 56, 0.88);
+    box-shadow: 0 20px 44px var(--card-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.hero-showcase { background: linear-gradient(145deg, rgba(23, 81, 71, 0.96), rgba(7, 39, 36, 0.94)); }
+.showcase-summary { border-color: rgba(143, 238, 207, 0.18); background: rgba(7, 39, 36, 0.82); }
+.showcase-summary span,
+.showcase-summary small { color: #a8c9bd; }
+.showcase-summary strong { color: #f4fff9; }
+.calculator-card,
+.result-card { background: rgba(13, 53, 47, 0.94); }
+.input-group input,
+.input-group select {
+    border-color: rgba(143, 238, 207, 0.18);
+    border-radius: 15px;
+    background: rgba(4, 30, 27, 0.58);
+    color: #f4fff9;
+}
+.input-group select option { background: #123f38; color: #f4fff9; }
+.empty-result-state { border-color: rgba(105, 215, 180, 0.32); background: rgba(105, 215, 180, 0.08); }
+.empty-result-state strong,
+.result-item strong,
+.flow-node strong { color: #f4fff9; }
+.result-dashboard .water-result { border-color: rgba(105, 215, 180, 0.3); background: linear-gradient(145deg, rgba(105, 215, 180, 0.16), rgba(4, 35, 31, 0.35)); }
+.result-dashboard .water-number,
+.water-number { color: #9aecd0; }
+.result-note,
+.result-facts,
+.calculation-card,
+.water-uses,
+.system-flow,
+.recommendation-card,
+.estimate-panel { background: rgba(105, 215, 180, 0.06); }
+.result-item { background: #103c35; }
+.flow-node span { border-color: rgba(105, 215, 180, 0.32); border-radius: 18px; background: rgba(105, 215, 180, 0.1); }
+.flow-pipe { background: linear-gradient(180deg, rgba(105, 215, 180, 0.2), var(--accent)); }
+.theme-toggle { border-color: rgba(143, 238, 207, 0.24); background: rgba(11, 48, 45, 0.92); color: #f4fff9; }
+.theme-panel { border-color: rgba(105, 215, 180, 0.4); border-radius: 22px; background: rgba(13, 53, 47, 0.98); }
+.theme-panel-heading strong,
+.theme-preset,
+.theme-panel label { color: #f4fff9; }
