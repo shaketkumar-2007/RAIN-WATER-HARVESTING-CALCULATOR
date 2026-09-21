@@ -32,11 +32,11 @@
     <div class="theme-panel" id="themePanel" aria-label="Theme controls" hidden>
         <label>
             <span>Background</span>
-            <input type="color" id="bgColor" value="#020403" aria-label="Choose background color">
+            <input type="color" id="bgColor" value="#07100d" aria-label="Choose background color">
         </label>
         <label>
             <span>Accent</span>
-            <input type="color" id="accentColor" value="#00ff88" aria-label="Choose accent color">
+            <input type="color" id="accentColor" value="#66d39a" aria-label="Choose accent color">
         </label>
     </div>
 
@@ -59,7 +59,8 @@
 
             <nav class="top-nav" aria-label="Main navigation">
                 <a href="/">Home</a>
-                <a href="/calculator" aria-current="page">Calculator</a>
+                <a class="nav-calculator" href="/calculator" aria-current="page">Calculate 💧</a>
+                <a href="/about#formula-title">How It Works</a>
                 <a href="/about">About</a>
             </nav>
 
@@ -191,7 +192,7 @@
                         </div>
 
                         <h2>
-                            ENTER YOUR DETAILS
+                            Enter your details
                         </h2>
                     </div>
 
@@ -440,8 +441,7 @@
                         </div>
 
                         <h2>
-                            YOUR HARVESTING
-                            POTENTIAL
+                            Your harvesting potential
                         </h2>
 
                     </div>
@@ -479,6 +479,16 @@
                     <button class="share-result" type="button" onclick="shareResult()">Share result</button>
                 </div>
 
+                <section class="recommendation-card" aria-labelledby="recommendation-title">
+                    <div class="recommendation-title">🌱 RECOMMENDED APPROACH</div>
+                    <h3 id="recommendation-title">{{ result.method }}</h3>
+                    <p>Your {{ result.category | lower }} rainfall profile and {{ result.water | round(0) | int }} L estimated annual collection suggest that this approach is a practical starting point for your site.</p>
+                    <details>
+                        <summary>Why this recommendation?</summary>
+                        <p>{{ result.method }} is recommended because the rainfall category is <strong>{{ result.category }}</strong> and the estimated yield supports a {{ result.scale | lower }}. The final tank, filter, and recharge design should be confirmed against site conditions.</p>
+                    </details>
+                </section>
+
                 <div class="system-flow" aria-label="Recommended rainwater harvesting flow">
                     <div class="recommendation-title">YOUR RECOMMENDED SYSTEM</div>
                     <div class="flow-diagram">
@@ -507,6 +517,74 @@
                         </div>
                     </div>
                 </div>
+
+                <section class="result-facts" aria-labelledby="result-facts-title">
+                    <div class="result-section-heading">
+                        <div class="section-number">WHY THIS RESULT</div>
+                        <h3 id="result-facts-title">Your estimate, explained</h3>
+                    </div>
+                    <div class="result-facts-grid">
+                        <div class="result-fact">
+                            <span>💧 COLLECTION</span>
+                            <strong>{{ result.water }} L</strong>
+                            <small>estimated annual collection</small>
+                        </div>
+                        <div class="result-fact">
+                            <span>🌧️ RAINFALL</span>
+                            <strong>{{ result.rainfall }} mm</strong>
+                            <small>annual planning estimate</small>
+                        </div>
+                        <div class="result-fact">
+                            <span>🏠 CATCHMENT</span>
+                            <strong>{{ result.area }} m²</strong>
+                            <small>effective roof area</small>
+                        </div>
+                        <div class="result-fact">
+                            <span>♻️ EFFICIENCY</span>
+                            <strong>{{ (result.coefficient * result.efficiency * 100) | round(0) | int }}%</strong>
+                            <small>roof and collection performance</small>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="calculation-card" aria-labelledby="calculation-title">
+                    <div class="result-section-heading">
+                        <div class="section-number">YOUR CALCULATION</div>
+                        <h3 id="calculation-title">How your result was calculated</h3>
+                    </div>
+                    <div class="calculation-equation">
+                        <div><span>ROOF AREA</span><strong>{{ result.area }} m²</strong></div>
+                        <b>×</b>
+                        <div><span>ANNUAL RAINFALL</span><strong>{{ result.rainfall }} mm</strong></div>
+                        <b>×</b>
+                        <div><span>RUNOFF COEFFICIENT</span><strong>{{ result.coefficient }}</strong></div>
+                        <b>×</b>
+                        <div><span>COLLECTION EFFICIENCY</span><strong>{{ result.efficiency }}</strong></div>
+                    </div>
+                    <div class="calculation-total">
+                        <span>ESTIMATED COLLECTION</span>
+                        <strong>{{ result.water }} L / year</strong>
+                    </div>
+                    <details class="coefficient-help">
+                        <summary>Why {{ result.coefficient }}?</summary>
+                        <p>{{ roof_type }} roofs use a planning coefficient of {{ result.coefficient }} in this calculator. Actual runoff depends on roof material, slope, surface condition, and system losses.</p>
+                    </details>
+                </section>
+
+                <section class="water-uses" aria-labelledby="water-uses-title">
+                    <div class="result-section-heading">
+                        <div class="section-number">MAKE IT PRACTICAL</div>
+                        <h3 id="water-uses-title">What could this water help with?</h3>
+                        <p>Illustrative ways to think about your annual harvest.</p>
+                    </div>
+                    <div class="water-use-grid">
+                        <div><span>🚽</span><strong>Toilet flushing</strong><small>35% of your harvest</small></div>
+                        <div><span>🌱</span><strong>Garden irrigation</strong><small>25% of your harvest</small></div>
+                        <div><span>🧹</span><strong>Cleaning</strong><small>15% of your harvest</small></div>
+                        <div><span>🚗</span><strong>Vehicle washing</strong><small>15% of your harvest</small></div>
+                        <div><span>🌎</span><strong>Groundwater recharge</strong><small>10% of your harvest</small></div>
+                    </div>
+                </section>
 
                 <!-- RESULT GRID -->
 
@@ -621,23 +699,6 @@
 
                 <!-- HARVESTING METHOD -->
 
-                <div class="recommendation green">
-
-                    <div class="recommendation-title">
-                        RECOMMENDED SYSTEM
-                    </div>
-
-                    <div class="recommendation-main">
-                        {{ result.method }}
-                    </div>
-
-                    <p>
-                        {{ result.scale }}
-                    </p>
-
-                </div>
-
-
                 <!-- STORAGE -->
 
                 <div class="recommendation">
@@ -705,13 +766,21 @@
         <!-- FOOTER -->
 
         <footer>
-
-            <div>
-                {{ site_name }}
+            <div class="footer-brand">
+                <strong>💧 {{ site_name }}</strong>
+                <span>Calculate • Understand • Harvest</span>
             </div>
-
-            <div>
-                SAVE WATER • HARVEST RAIN • BUILD THE FUTURE
+            <div class="footer-links">
+                <strong>Quick links</strong>
+                <a href="/">Home</a>
+                <a href="/calculator">Calculator</a>
+                <a href="/about#formula-title">How It Works</a>
+                <a href="/about">About</a>
+            </div>
+            <div class="footer-disclaimer">
+                <strong>Disclaimer</strong>
+                <p>Results are estimates for planning purposes. Verify site conditions and local requirements before construction.</p>
+                <span>© 2026 {{ site_name }}</span>
             </div>
 
         </footer>

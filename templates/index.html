@@ -32,11 +32,11 @@
     <div class="theme-panel" id="themePanel" aria-label="Theme controls" hidden>
         <label>
             <span>Background</span>
-            <input type="color" id="bgColor" value="#020403" aria-label="Choose background color">
+            <input type="color" id="bgColor" value="#07100d" aria-label="Choose background color">
         </label>
         <label>
             <span>Accent</span>
-            <input type="color" id="accentColor" value="#00ff88" aria-label="Choose accent color">
+            <input type="color" id="accentColor" value="#66d39a" aria-label="Choose accent color">
         </label>
     </div>
 
@@ -59,7 +59,8 @@
 
             <nav class="top-nav" aria-label="Main navigation">
                 <a href="/" aria-current="page">Home</a>
-                <a href="/calculator">Calculator</a>
+                <a class="nav-calculator" href="/calculator">Calculate 💧</a>
+                <a href="#how-it-works">How It Works</a>
                 <a href="/about">About</a>
             </nav>
 
@@ -168,27 +169,27 @@
 
         <section class="proof-strip" aria-label="RainHarvest Pro highlights">
             <div class="proof-item">
-                <strong>29</strong>
-                <span>regions mapped</span>
+                <strong>💧 100 m²</strong>
+                <span>example catchment area</span>
             </div>
             <div class="proof-item">
-                <strong>4</strong>
-                <span>roof profiles</span>
+                <strong>🌧️ 650 mm</strong>
+                <span>example annual rainfall</span>
             </div>
             <div class="proof-item">
-                <strong>1</strong>
-                <span>clear annual estimate</span>
+                <strong>♻️ 70–90%</strong>
+                <span>runoff efficiency range</span>
             </div>
             <div class="proof-caption">
-                <span class="info-label">DESIGNED FOR DECISIONS</span>
-                <p>Simple inputs. Practical recommendations. A clearer path to water resilience.</p>
+                <span class="info-label">WHY THESE NUMBERS MATTER</span>
+                <p>Your location, roof size, roof type, and collection efficiency work together to shape the final estimate.</p>
             </div>
         </section>
 
 
         <!-- CALCULATOR -->
 
-        <section class="calculator-section" id="calculator" hidden>
+        <section class="calculator-section" id="calculator">
 
             <div class="calculator-card">
 
@@ -200,7 +201,7 @@
                         </div>
 
                         <h2>
-                            ENTER YOUR DETAILS
+                            Enter your details
                         </h2>
                     </div>
 
@@ -419,8 +420,7 @@
                         </div>
 
                         <h2>
-                            YOUR HARVESTING
-                            POTENTIAL
+                            Your harvesting potential
                         </h2>
 
                     </div>
@@ -640,10 +640,24 @@
 
         </section>
 
-        <section class="education-section" aria-labelledby="education-title">
+        <section class="water-uses-home" aria-labelledby="water-uses-home-title">
+            <div class="section-heading">
+                <div class="section-number">02 / MAKE IT PRACTICAL</div>
+                <h2 id="water-uses-home-title">What can harvested water help with?</h2>
+            </div>
+            <div class="water-use-grid">
+                <div><span>🚽</span><strong>Toilet flushing</strong><small>Reduce potable water demand.</small></div>
+                <div><span>🌱</span><strong>Garden irrigation</strong><small>Keep plants growing between rains.</small></div>
+                <div><span>🧹</span><strong>Cleaning</strong><small>Use captured water for everyday tasks.</small></div>
+                <div><span>🚗</span><strong>Vehicle washing</strong><small>Save treated supply water.</small></div>
+                <div><span>🌎</span><strong>Groundwater recharge</strong><small>Return overflow to the ground.</small></div>
+            </div>
+        </section>
+
+        <section class="education-section" id="how-it-works" aria-labelledby="education-title">
             <div class="education-copy">
                 <div class="section-number">02 / THE BASICS</div>
-                <h2 id="education-title">TURN A ROOFTOP INTO A WATER SOURCE</h2>
+                <h2 id="education-title">How your roof becomes a water source</h2>
                 <p>Rainwater harvesting captures rain where it falls, filters out debris, and stores the clean runoff for useful non-potable needs. It also slows stormwater and helps recharge the ground.</p>
                 <div class="education-points">
                     <div>
@@ -666,10 +680,29 @@
             </figure>
         </section>
 
+        <section class="formula-section homepage-formula" id="calculation" aria-labelledby="home-formula-title">
+            <div class="formula-card">
+                <div class="section-number">04 / CALCULATION</div>
+                <h2 id="home-formula-title">How your estimate is calculated</h2>
+                <div class="formula" aria-label="Water equals roof area times rainfall times runoff coefficient times collection efficiency">
+                    <span>WATER</span>
+                    <span>=</span>
+                    <span>ROOF AREA</span>
+                    <span>×</span>
+                    <span>RAINFALL</span>
+                    <span>×</span>
+                    <span>RUNOFF COEFFICIENT</span>
+                    <span>×</span>
+                    <span>COLLECTION EFFICIENCY</span>
+                </div>
+                <p>Every result is an estimate based on your selected location, catchment area, roof type, and collection losses.</p>
+            </div>
+        </section>
+
         <section class="practical-section" aria-labelledby="practical-title">
             <div class="section-heading">
                 <div class="section-number">03 / PRACTICAL GUIDE</div>
-                <h2 id="practical-title">MAKE YOUR SYSTEM SAFER AND MORE USEFUL</h2>
+                <h2 id="practical-title">Make your system safer and more useful</h2>
             </div>
             <div class="practical-grid">
                 <article class="practical-card">
@@ -705,7 +738,7 @@
 
             <div class="section-heading">
                 <div class="section-number">05 / BENEFITS</div>
-                <h2>WHY RAINWATER HARVESTING MATTERS</h2>
+                <h2>Why rainwater harvesting matters</h2>
             </div>
 
             <div class="feature-grid">
@@ -744,13 +777,21 @@
         <!-- FOOTER -->
 
         <footer>
-
-            <div>
-                {{ site_name }}
+            <div class="footer-brand">
+                <strong>💧 {{ site_name }}</strong>
+                <span>Calculate • Understand • Harvest</span>
             </div>
-
-            <div>
-                SAVE WATER • HARVEST RAIN • BUILD THE FUTURE
+            <div class="footer-links">
+                <strong>Quick links</strong>
+                <a href="/">Home</a>
+                <a href="/calculator">Calculator</a>
+                <a href="/about#formula-title">How It Works</a>
+                <a href="/about">About</a>
+            </div>
+            <div class="footer-disclaimer">
+                <strong>Disclaimer</strong>
+                <p>Results are estimates for planning purposes. Verify site conditions and local requirements before construction.</p>
+                <span>© 2026 {{ site_name }}</span>
             </div>
 
         </footer>

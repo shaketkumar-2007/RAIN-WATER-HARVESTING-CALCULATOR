@@ -10,18 +10,19 @@
 
 
 :root {
-    --bg: #020403;
-    --bg-alt: #08150d;
-    --panel: rgba(8, 16, 13, 0.84);
+    --bg: #07100d;
+    --bg-alt: #0d1d17;
+    --panel: rgba(12, 25, 20, 0.86);
     --text: #ffffff;
     --muted: #a5aaa7;
-    --accent: #00ff88;
-    --accent-soft: rgba(0, 255, 136, 0.12);
-    --accent-strong: #00ff88;
+    --accent: #66d39a;
+    --accent-soft: rgba(102, 211, 154, 0.12);
+    --accent-strong: #66d39a;
+    --water-blue: #62b9e8;
     --danger: #ff3131;
     --card-shadow: rgba(0, 0, 0, 0.45);
     --content-width: 1200px;
-    --focus-ring: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 0 6px var(--accent);
+    --focus-ring: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 0 6px var(--water-blue);
 }
 
 
@@ -344,6 +345,20 @@ body {
 .top-nav a[aria-current="page"] {
     color: var(--accent);
     font-weight: 800;
+}
+
+.top-nav .nav-calculator {
+    padding: 10px 14px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: var(--accent);
+    color: #00150b;
+    font-weight: 900;
+}
+
+.top-nav .nav-calculator:hover {
+    color: #00150b;
+    box-shadow: 0 8px 18px rgba(0, 255, 136, 0.18);
 }
 
 
@@ -1052,6 +1067,28 @@ body {
     line-height: 1.5;
 }
 
+.water-uses-home {
+    width: min(1200px, 90%);
+    margin: 0 auto 90px;
+    padding: 34px;
+    border: 1px solid rgba(102, 211, 154, 0.16);
+    border-radius: 22px;
+    background: rgba(12, 25, 20, 0.72);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+}
+
+.water-uses-home .section-heading {
+    margin-bottom: 22px;
+}
+
+.water-uses-home .water-use-grid {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.water-uses-home .water-use-grid div {
+    min-height: 128px;
+}
+
 
 /* =========================================
    CALCULATOR SECTION
@@ -1062,6 +1099,7 @@ body {
     width: 90%;
 
     max-width: 1200px;
+    min-width: 0;
 
     margin:
         0 auto
@@ -1099,6 +1137,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+    min-width: 0;
     margin-bottom: 36px;
 }
 
@@ -1106,6 +1145,7 @@ body {
     display: flex;
     align-items: center;
     gap: 9px;
+    min-width: 0;
     color: #66726b;
     font-size: 10px;
     letter-spacing: 1.4px;
@@ -1503,6 +1543,165 @@ body {
     font-size: 20px;
 }
 
+.result-facts,
+.calculation-card,
+.water-uses {
+    margin: 26px 0;
+    padding: 22px;
+    border: 1px solid rgba(0, 255, 136, 0.16);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.result-section-heading {
+    margin-bottom: 18px;
+}
+
+.result-section-heading .section-number {
+    margin-bottom: 7px;
+}
+
+.result-section-heading h3 {
+    font-size: 20px;
+    line-height: 1.2;
+}
+
+.result-section-heading p {
+    margin-top: 7px;
+    color: #89968e;
+    font-size: 12px;
+}
+
+.result-facts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.result-fact {
+    display: grid;
+    gap: 6px;
+    padding: 16px;
+    background: #070b09;
+}
+
+.result-fact span,
+.calculation-equation span,
+.calculation-total span {
+    color: #79857d;
+    font-size: 9px;
+    letter-spacing: 1.3px;
+}
+
+.result-fact strong {
+    color: var(--accent);
+    font-size: 22px;
+}
+
+.result-fact small {
+    color: #8b968f;
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+.calculation-equation {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.calculation-equation div {
+    flex: 1 1 100px;
+    display: grid;
+    gap: 7px;
+    padding: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.16);
+}
+
+.calculation-equation strong {
+    color: #eef8f2;
+    font-size: 16px;
+}
+
+.calculation-equation > b {
+    align-self: center;
+    color: var(--accent);
+    font-size: 17px;
+}
+
+.calculation-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 14px;
+    padding: 16px;
+    border-left: 3px solid var(--accent);
+    background: rgba(0, 255, 136, 0.08);
+}
+
+.calculation-total strong {
+    color: var(--accent);
+    font-size: 20px;
+}
+
+.coefficient-help {
+    margin-top: 15px;
+    color: #aeb9b2;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.coefficient-help summary {
+    width: fit-content;
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.coefficient-help p {
+    max-width: 560px;
+    margin-top: 10px;
+}
+
+.water-use-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.water-use-grid div {
+    display: grid;
+    gap: 7px;
+    min-height: 112px;
+    padding: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.water-use-grid span {
+    font-size: 22px;
+}
+
+.water-use-grid strong {
+    color: #e4eee8;
+    font-size: 11px;
+    line-height: 1.25;
+}
+
+.water-use-grid small {
+    color: #7f8b83;
+    font-size: 10px;
+}
+
 
 /* =========================================
    CARDS
@@ -1510,6 +1709,7 @@ body {
 
 .calculator-card,
 .result-card {
+    min-width: 0;
 
     background:
         rgba(4, 8, 6, 0.84);
@@ -1912,6 +2112,50 @@ body {
 
     border-left-color:
         var(--accent);
+}
+
+.recommendation-card {
+    margin: 26px 0;
+    padding: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.38);
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(0, 255, 136, 0.13), rgba(0, 255, 136, 0.035));
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.recommendation-card .recommendation-title {
+    color: var(--accent);
+}
+
+.recommendation-card h3 {
+    max-width: 480px;
+    margin: 9px 0 10px;
+    color: #f0fff6;
+    font-size: clamp(21px, 3vw, 30px);
+    line-height: 1.15;
+}
+
+.recommendation-card > p,
+.recommendation-card details {
+    max-width: 620px;
+    color: #aab8af;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.recommendation-card details {
+    margin-top: 14px;
+}
+
+.recommendation-card summary {
+    width: fit-content;
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.recommendation-card details p {
+    margin-top: 9px;
 }
 
 
@@ -2473,31 +2717,60 @@ body {
 ========================================= */
 
 footer {
-
-    border-top:
-        1px solid
-        rgba(0, 255, 136, 0.12);
-
-    padding:
-        30px 6%;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    color: #555;
-
-    font-size: 10px;
-
-    letter-spacing: 1.5px;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr 1.4fr;
+    gap: 34px;
+    margin-top: 40px;
+    padding: 42px 6%;
+    border-top: 1px solid rgba(0, 255, 136, 0.18);
+    color: #7d8981;
+    font-size: 11px;
+    line-height: 1.55;
 }
 
+.footer-brand,
+.footer-links,
+.footer-disclaimer {
+    display: grid;
+    align-content: start;
+    gap: 7px;
+}
 
-footer div:first-child {
+.footer-brand strong {
+    color: var(--accent);
+    font-size: 18px;
+}
 
-    color: #00ff88;
+.footer-brand span {
+    color: #a0aaa3;
+}
 
-    font-weight: bold;
+.footer-links strong,
+.footer-disclaimer strong {
+    margin-bottom: 3px;
+    color: #dce9e1;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.footer-links a {
+    width: fit-content;
+    color: #89958d;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: var(--accent);
+}
+
+.footer-disclaimer p {
+    max-width: 360px;
+}
+
+.footer-disclaimer span {
+    margin-top: 5px;
+    color: #657169;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2529,6 +2802,19 @@ footer div:first-child {
         grid-template-columns: 1fr;
     }
 
+    .water-use-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .calculation-equation {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .calculation-equation > b {
+        align-self: center;
+    }
+
     .header {
         flex-wrap: wrap;
         justify-content: center;
@@ -2554,6 +2840,11 @@ footer div:first-child {
 
         grid-template-columns:
             1fr;
+    }
+
+    .calculator-section.has-result .result-card,
+    .calculator-section.has-result .calculator-card {
+        order: initial;
     }
 
 
@@ -2610,6 +2901,15 @@ footer div:first-child {
         gap: 18px 0;
     }
 
+    .water-uses-home {
+        width: 86%;
+        padding: 25px;
+    }
+
+    .water-uses-home .water-use-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
 
     .proof-item:nth-child(2) {
         border-right: none;
@@ -2631,12 +2931,14 @@ footer div:first-child {
 
     .wizard-heading {
         gap: 7px;
+        overflow: hidden;
     }
 
     .wizard-step {
         gap: 5px;
         font-size: 8px;
         letter-spacing: 0.8px;
+        white-space: normal;
     }
 
     .wizard-step span {
@@ -2646,12 +2948,8 @@ footer div:first-child {
 
 
     footer {
-
-        flex-direction: column;
-
-        gap: 15px;
-
-        text-align: center;
+        grid-template-columns: 1fr;
+        gap: 24px;
     }
 
 }
@@ -2693,11 +2991,52 @@ footer div:first-child {
         width: calc(100% - 30px);
     }
 
+    .water-uses-home {
+        width: calc(100% - 30px);
+        padding: 20px;
+    }
+
+    .calculator-section {
+        margin-bottom: 90px;
+    }
+
+    .smart-message {
+        flex-direction: column;
+    }
+
+    .satisfaction-card {
+        width: 100%;
+    }
+
+    .wizard-panel[data-step="2"] .calculate-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 15px;
+        left: 15px;
+        z-index: 25;
+        width: auto;
+        margin: 0;
+        padding: 17px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        border-radius: 14px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.42);
+    }
+
 
     .result-grid {
 
         grid-template-columns:
             1fr;
+    }
+
+    .result-facts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .calculation-total {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
     }
 
     .flow-steps {
