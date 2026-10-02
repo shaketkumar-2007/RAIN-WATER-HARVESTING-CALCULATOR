@@ -214,7 +214,7 @@
                 </div>
 
 
-                <form method="POST" id="calculatorForm">
+                <form method="POST" action="#result" id="calculatorForm">
 
                     {% if error_message %}
                     <div class="form-message" role="alert" aria-live="assertive">
@@ -223,7 +223,7 @@
                     {% endif %}
                     <div class="form-message" id="formError" role="alert" aria-live="polite" hidden></div>
 
-                    <div class="wizard-panel is-active" data-step="1">
+                    <div class="wizard-panel {% if not result %}is-active{% endif %}" data-step="1">
                         <div class="wizard-panel-heading">
                             <div class="section-number">LOCATION DETAILS</div>
                             <h3>Where is your building?</h3>
@@ -324,7 +324,7 @@
                     </button>
                     </div>
 
-                    <div class="wizard-panel" data-step="2">
+                    <div class="wizard-panel {% if result %}is-active{% endif %}" data-step="2">
                         <div class="wizard-panel-heading">
                             <div class="section-number">ROOF DETAILS</div>
                             <h3>Tell us about your roof</h3>
@@ -1278,6 +1278,12 @@
         }
         updateRainAnimation();
         updatePreview();
+        const resultCard = document.getElementById("result");
+        if (resultCard) {
+            requestAnimationFrame(() => {
+                resultCard.scrollIntoView({ block: "start", behavior: "instant" });
+            });
+        }
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) {
                 cancelAnimationFrame(animationFrame);
