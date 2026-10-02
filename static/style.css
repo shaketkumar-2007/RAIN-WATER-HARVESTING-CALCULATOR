@@ -4873,3 +4873,330 @@ footer {
         bottom: 14px;
     }
 }
+
+.recommendation-card {
+    border-color: var(--theme-border);
+    background: var(--panel-muted);
+    color: var(--text);
+}
+
+.recommendation-card h3 {
+    color: var(--text);
+}
+
+.recommendation-card > p,
+.recommendation-card details,
+.recommendation-card details p {
+    color: var(--muted);
+}
+
+.skip-link:focus {
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.skip-link {
+    color: var(--on-accent);
+}
+
+.logo span.logo-water {
+    color: var(--accent-strong);
+}
+
+.education-points div {
+    border-color: var(--theme-border);
+}
+
+.education-points strong,
+.practical-number {
+    color: var(--accent-strong);
+}
+
+.education-points span,
+.education-figure figcaption,
+.image-strip figcaption {
+    color: var(--muted);
+}
+
+.recommendation-card summary {
+    color: var(--accent-strong);
+}
+
+.top-nav a.nav-calculator[aria-current="page"],
+.top-nav a.nav-calculator[aria-current="page"]:hover {
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.result-dashboard .result-top h2 {
+    color: var(--text);
+}
+
+.result-dashboard .water-result {
+    border-color: var(--theme-border);
+    background: var(--panel-muted);
+}
+
+.result-dashboard .water-number {
+    color: var(--accent-strong);
+}
+
+.result-dashboard .water-unit,
+.result-dashboard .water-average {
+    color: var(--muted);
+}
+
+.result-facts-grid {
+    border-color: var(--theme-border);
+    background: var(--theme-border);
+}
+
+.result-fact {
+    background: var(--panel-muted);
+}
+
+.result-fact span,
+.result-fact small,
+.calculation-equation span,
+.calculation-total span {
+    color: var(--muted);
+}
+
+.result-fact strong,
+.calculation-equation strong,
+.calculation-total,
+.calculation-total strong {
+    color: var(--text);
+}
+
+.calculation-equation div {
+    border-color: var(--theme-border);
+    background: var(--panel-muted);
+}
+
+.calculation-equation > b {
+    color: var(--accent-strong);
+}
+
+.calculation-total {
+    border-color: var(--theme-border);
+    border-left: 3px solid var(--accent-strong);
+    background: var(--panel-muted);
+}
+
+.coefficient-help,
+.coefficient-help p {
+    color: var(--muted);
+}
+
+.coefficient-help summary {
+    color: var(--accent-strong);
+}
+
+.recommendation,
+.recommendation.green {
+    border-color: var(--theme-border);
+    background: var(--panel-muted);
+    color: var(--text);
+}
+
+.recommendation p {
+    color: var(--muted);
+}
+
+.recommendation-main,
+.category {
+    color: var(--accent-strong);
+}
+
+.system-flow {
+    border-color: var(--theme-border);
+    background: var(--panel);
+    color: var(--text);
+}
+
+.flow-node span {
+    border-color: var(--theme-border);
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+}
+
+.flow-node strong {
+    color: var(--muted);
+}
+
+.flow-rain {
+    color: var(--accent-strong);
+}
+
+.flow-pipe b {
+    background: var(--accent-strong);
+}
+
+.smart-message {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid var(--theme-border);
+    border-radius: 16px;
+    background: var(--panel);
+    color: var(--text);
+}
+
+.smart-message > .smart-icon {
+    grid-column: 1;
+    grid-row: 1;
+    color: var(--accent-strong);
+}
+
+.smart-message > div:nth-child(2) {
+    grid-column: 2;
+    min-width: 0;
+}
+
+.smart-message > div:nth-child(2) strong {
+    display: block;
+    color: var(--accent-strong);
+}
+
+.smart-message > div:nth-child(2) p {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.satisfaction-card {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+    margin: 8px 0 0;
+    padding: 18px;
+    border: 1px solid var(--theme-border);
+    border-radius: 14px;
+    background: var(--panel-muted);
+    color: var(--text);
+}
+
+.satisfaction-card .recommendation-title {
+    color: var(--text);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+.satisfaction-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.satisfaction-button {
+    display: inline-flex;
+    min-width: 132px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: 1px solid var(--theme-border);
+    border-radius: 10px;
+    background: var(--panel);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.satisfaction-button:hover {
+    border-color: var(--accent-strong);
+    background: var(--accent-soft);
+    color: var(--text);
+}
+
+.satisfaction-button[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.satisfaction-button:focus-visible,
+.ideas-btn:focus-visible {
+    outline: 3px solid var(--accent-strong);
+    outline-offset: 3px;
+}
+
+.feedback-status {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.smart-message .feedback-status {
+    color: var(--muted);
+}
+
+.feedback-status:empty {
+    display: none;
+}
+
+.more-ideas {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--theme-border);
+}
+
+.more-ideas ul {
+    color: var(--text);
+}
+
+.ideas-btn {
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.ideas-btn:hover {
+    background: var(--accent-strong);
+    color: var(--on-accent);
+}
+
+@media (max-width: 520px) {
+    .smart-message {
+        grid-template-columns: 24px minmax(0, 1fr);
+        gap: 10px;
+        padding: 16px;
+    }
+
+    .satisfaction-card {
+        padding: 14px;
+    }
+
+    .satisfaction-options {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .satisfaction-button {
+        min-width: 0;
+        padding-inline: 10px;
+    }
+}
+
+@media (max-width: 360px) {
+    .satisfaction-options {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

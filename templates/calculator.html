@@ -708,10 +708,13 @@
 
                 </div>
 
-
                 <!-- HARVESTING METHOD -->
 
-                <!-- STORAGE -->
+                <div class="recommendation green">
+                    <div class="recommendation-title">RECOMMENDED SYSTEM</div>
+                    <div class="recommendation-main">{{ result.method }}</div>
+                    <p>{{ result.scale }}</p>
+                </div>
 
                 <div class="recommendation">
 
@@ -747,10 +750,11 @@
 
                     <div class="satisfaction-card">
                         <div class="recommendation-title">IS THIS RECOMMENDATION USEFUL?</div>
-                        <div class="satisfaction-options">
-                            <label><input type="checkbox" id="satisfiedCheck" onchange="recommendationSatisfied()"> Satisfied</label>
-                            <label><input type="checkbox" id="unsatisfiedCheck" onchange="recommendationUnsatisfied()"> Unsatisfied</label>
+                        <div class="satisfaction-options" role="group" aria-label="Rate this recommendation">
+                            <button type="button" class="satisfaction-button" id="satisfiedCheck" aria-pressed="false" onclick="recommendationSatisfied()">Satisfied</button>
+                            <button type="button" class="satisfaction-button" id="unsatisfiedCheck" aria-pressed="false" onclick="recommendationUnsatisfied()">Not satisfied</button>
                         </div>
+                        <p class="feedback-status" id="feedbackStatus" role="status" aria-live="polite"></p>
                         <div id="moreIdeas" class="more-ideas" hidden>
                             <div class="recommendation-title">MORE WATER-SAVING IDEAS FOR {{ selected_district or 'YOUR LOCALITY' }}</div>
                             <ul id="ideaList"></ul>
@@ -1130,21 +1134,32 @@
         function recommendationSatisfied() {
                 const satisfied = document.getElementById("satisfiedCheck");
                 const unsatisfied = document.getElementById("unsatisfiedCheck");
-                if (satisfied.checked) {
-                    unsatisfied.checked = false;
-                    window.location.href = "/";
-                }
+                const selected = satisfied.getAttribute("aria-pressed") !== "true";
+                satisfied.setAttribute("aria-pressed", String(selected));
+                unsatisfied.setAttribute("aria-pressed", "false");
+                document.getElementById("moreIdeas").hidden = true;
+                document.getElementById("ideaList").replaceChildren();
+                document.getElementById("feedbackStatus").textContent = selected
+                    ? "Thank you for your feedback."
+                    : "";
         }
 
         function recommendationUnsatisfied() {
                 const unsatisfied = document.getElementById("unsatisfiedCheck");
                 const satisfied = document.getElementById("satisfiedCheck");
-                if (unsatisfied.checked) {
-                    satisfied.checked = false;
-                    document.getElementById("moreIdeas").hidden = false;
+                const selected = unsatisfied.getAttribute("aria-pressed") !== "true";
+                unsatisfied.setAttribute("aria-pressed", String(selected));
+                satisfied.setAttribute("aria-pressed", "false");
+                const moreIdeas = document.getElementById("moreIdeas");
+                const feedbackStatus = document.getElementById("feedbackStatus");
+                if (selected) {
+                    moreIdeas.hidden = false;
                     showMoreIdeas();
+                    feedbackStatus.textContent = "Here are some additional water-saving ideas.";
                 } else {
-                    document.getElementById("moreIdeas").hidden = true;
+                    moreIdeas.hidden = true;
+                    document.getElementById("ideaList").replaceChildren();
+                    feedbackStatus.textContent = "";
                 }
         }
 
@@ -1153,8 +1168,7 @@
                 const item = document.createElement("li");
                 item.textContent = ideas[ideaIndex % ideas.length];
                 ideaIndex += 1;
-                ideaList.innerHTML = "";
-                ideaList.appendChild(item);
+                ideaList.replaceChildren(item);
         }
 
         function setWizardStep(step) {
