@@ -20,22 +20,22 @@
 
     <div class="theme-panel" id="themePanel" aria-label="Theme controls" hidden>
         <div class="theme-panel-heading">
-            <strong>🎨 Customize Theme</strong>
-            <span>Make the calculator yours</span>
+            <strong>🎨 Appearance</strong>
+            <span>Choose a light page color and accent</span>
         </div>
         <div class="theme-presets" aria-label="Theme presets">
-            <button type="button" class="theme-preset" data-bg="#fbf7ef" data-accent="#2477b8"><span class="preset-swatch eco-swatch"></span>Cream Canvas</button>
-            <button type="button" class="theme-preset" data-bg="#0b302d" data-accent="#69d7b4"><span class="preset-swatch water-swatch"></span>Deep Teal</button>
-            <button type="button" class="theme-preset" data-bg="#eef7fb" data-accent="#2477b8"><span class="preset-swatch dark-swatch"></span>Water Blue</button>
+            <button type="button" class="theme-preset" data-bg="#ffffff" data-accent="#28734a"><span class="preset-swatch eco-swatch"></span>Pure white</button>
+            <button type="button" class="theme-preset" data-bg="#f4f8f5" data-accent="#28734a"><span class="preset-swatch water-swatch"></span>Soft sage</button>
+            <button type="button" class="theme-preset" data-bg="#f2f7fa" data-accent="#28734a"><span class="preset-swatch dark-swatch"></span>Cool mist</button>
         </div>
         <div class="theme-custom-label">Custom</div>
         <label>
             <span>Background</span>
-            <input type="color" id="bgColor" value="#fbf7ef" aria-label="Choose background color">
+            <input type="color" id="bgColor" value="#ffffff" aria-label="Choose background color">
         </label>
         <label>
             <span>Accent</span>
-            <input type="color" id="accentColor" value="#2477b8" aria-label="Choose accent color">
+            <input type="color" id="accentColor" value="#28734a" aria-label="Choose accent color">
         </label>
     </div>
 
@@ -133,10 +133,12 @@
                     </div>
 
                     <p>
-                        The estimate uses annual rainfall, the roof catchment area,
-                        the selected roof material, and collection efficiency.
+                        Annual harvestable water (L) = roof area (m²) × annual rainfall (mm/year)
+                        × roof runoff coefficient × collection efficiency. The displayed values use
+                        district planning estimates and do not represent live weather.
                         Since 1 mm of rainfall over 1 m² is approximately 1 litre,
-                        the result is shown as an estimated annual collection.
+                        the result is shown as an estimated annual collection. Actual yield depends
+                        on rainfall timing, first-flush losses, storage overflow, and system condition.
                     </p>
                 </div>
             </section>
@@ -176,7 +178,7 @@
             root.style.setProperty('--accent', accent);
             root.style.setProperty('--accent-soft', adjustColor(accent, 28));
             root.style.setProperty('--accent-strong', accent);
-            sessionStorage.setItem('rainharvest-theme-v4', JSON.stringify({ bg, accent }));
+            sessionStorage.setItem('rainharvest-theme-v5', JSON.stringify({ bg, accent }));
         }
 
         function adjustColor(hex, amount) {
@@ -188,7 +190,7 @@
             return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
         }
 
-        const savedTheme = JSON.parse(sessionStorage.getItem('rainharvest-theme-v4') || '{}');
+        const savedTheme = JSON.parse(sessionStorage.getItem('rainharvest-theme-v5') || '{}');
         if (savedTheme.bg && savedTheme.accent) {
             bgColorInput.value = savedTheme.bg;
             accentColorInput.value = savedTheme.accent;
@@ -234,6 +236,8 @@
         let drops = [];
         const savedLocation = JSON.parse(localStorage.getItem('rainharvest-location') || '{}');
         const rainfall = Number(savedLocation.rainfall) || 0;
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let animationFrame = 0;
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -243,7 +247,7 @@
 
         function createDrops() {
             drops = [];
-            const count = 70;
+            const count = reducedMotion ? 0 : (window.innerWidth <= 600 ? 24 : 64);
             for (let i = 0; i < count; i++) {
                 drops.push({
                     x: Math.random() * canvas.width,
@@ -258,35 +262,41 @@
         }
 
         function drawRain() {
+            if (document.hidden || reducedMotion) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ff88';
             const rainFactor = Math.min(Math.max(rainfall / 3000, 0), 1);
-            const speedMultiplier = 0.35 + Math.pow(rainFactor, 1.4) * 5.5;
+            const speedMultiplier = 0.55 + rainFactor * 1.4;
 
             drops.forEach((drop) => {
                 drop.y += drop.speed * speedMultiplier;
-                drop.x += Math.sin(Date.now() / 500 + drop.y / 20) * 1.5;
+                drop.x += drop.drift;
 
                 if (drop.y > canvas.height) {
                     drop.y = -drop.length - Math.random() * 100;
                     drop.x = Math.random() * canvas.width;
                 }
 
-                const rgb = accent === '#00ff88' ? { r: 37, g: 200, b: 130 } : { r: 80, g: 180, b: 255 };
                 ctx.beginPath();
                 ctx.moveTo(drop.x, drop.y);
                 ctx.lineTo(drop.x + drop.drift * 2, drop.y + drop.length);
-                ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${drop.opacity})`;
+                ctx.strokeStyle = `rgba(39, 105, 76, ${drop.opacity * (0.12 + rainFactor * 0.12)})`;
                 ctx.lineWidth = drop.width;
                 ctx.stroke();
             });
 
-            requestAnimationFrame(drawRain);
+            animationFrame = requestAnimationFrame(drawRain);
         }
 
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
-        drawRain();
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationFrame);
+            } else if (!reducedMotion) {
+                drawRain();
+            }
+        });
+        if (!reducedMotion) drawRain();
     </script>
 </body>
 </html>

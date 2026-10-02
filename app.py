@@ -47,11 +47,22 @@ with open(Path(__file__).with_name("districts.json"), encoding="utf-8-sig") as d
 
 RAINFALL_OVERRIDES = {
     "Punjab": {"Amritsar": 680, "Ludhiana": 730, "Patiala": 710, "Pathankot": 1100},
-    "Maharashtra": {"Mumbai": 2400, "Pune": 720, "Nagpur": 1100, "Nashik": 700},
-    "Kerala": {"Thiruvananthapuram": 1800, "Kochi": 3000, "Kozhikode": 3200, "Idukki": 4000},
+    "Maharashtra": {
+        "Mumbai City": 2400,
+        "Mumbai Suburban": 2400,
+        "Pune": 720,
+        "Nagpur": 1100,
+        "Nashik": 700,
+    },
+    "Kerala": {
+        "Thiruvananthapuram": 1800,
+        "Ernakulam": 3000,
+        "Kozhikode": 3200,
+        "Idukki": 4000,
+    },
     "Rajasthan": {"Jaipur": 550, "Jodhpur": 360, "Udaipur": 650, "Kota": 700},
     "Tamil Nadu": {"Chennai": 1400, "Coimbatore": 650, "Madurai": 850, "Kanyakumari": 1300},
-    "West Bengal": {"Kolkata": 1800, "Darjeeling": 3100, "Siliguri": 3200, "Durgapur": 1400},
+    "West Bengal": {"Kolkata": 1800, "Darjeeling": 3100},
 }
 
 DISTRICTS = {
@@ -139,7 +150,9 @@ def get_recommendation(rainfall, water):
 def calculate_water(rainfall, roof_area, roof_type):
     rainfall = max(0.0, to_float(rainfall, 0.0))
     roof_area = clamp(to_float(roof_area, 0.0), 0.0, MAX_ROOF_AREA_M2)
-    coefficient = ROOF_COEFFICIENTS.get(roof_type, 0.80)
+    if roof_type not in ROOF_COEFFICIENTS:
+        raise ValueError("Unsupported roof type.")
+    coefficient = ROOF_COEFFICIENTS[roof_type]
     water_litres = roof_area * rainfall * coefficient * COLLECTION_EFFICIENCY
     category, method, storage, scale = get_recommendation(rainfall, water_litres)
 
@@ -159,146 +172,122 @@ def calculate_water(rainfall, roof_area, roof_type):
 
 
 def get_locality_values(state, district):
-    state_rainfall = STATES.get(state, 0)
     state_districts = DISTRICTS.get(state, {})
     if district in state_districts:
         return district, state_districts[district]
-    return "", state_rainfall
+    return "", 0
+
+
+def process_calculator_form(form):
+    selected_state = (form.get("state", "") or "").strip()
+    selected_district, rainfall = get_locality_values(
+        selected_state,
+        (form.get("district", "") or "").strip(),
+    )
+    area_text = (form.get("roof_area", "") or "").strip()
+    roof_area_display = to_float(area_text, None)
+    area_unit = form.get("area_unit", "m2")
+    water_unit = form.get("water_unit", "litres")
+    roof_type = form.get("roof_type", "RCC / Concrete")
+    error_message = None
+
+    if selected_state not in STATES:
+        error_message = "Please choose a valid state."
+    elif not selected_district:
+        error_message = "Please choose a district from the selected state's list."
+    elif not area_text:
+        error_message = "Enter your roof area to calculate a valid estimate."
+    elif roof_area_display is None:
+        error_message = "Enter a valid numeric roof area."
+    elif area_unit not in {"m2", "ft2"}:
+        error_message = "Choose a supported roof-area unit."
+        area_unit = "m2"
+    elif water_unit not in {"litres", "m3"}:
+        error_message = "Choose a supported output unit."
+        water_unit = "litres"
+    elif roof_type not in ROOF_COEFFICIENTS:
+        error_message = "Choose a supported roof type."
+        roof_type = "RCC / Concrete"
+
+    result = None
+    roof_area = roof_area_display if roof_area_display is not None else 0
+    if not error_message:
+        if area_unit == "ft2":
+            roof_area *= 0.092903
+
+        if roof_area <= 0:
+            error_message = "Roof area must be greater than zero."
+        elif roof_area > MAX_ROOF_AREA_M2:
+            error_message = "Roof area exceeds the supported maximum of 100,000 m²."
+        elif rainfall <= 0:
+            error_message = "No rainfall data is available for this district. Please choose another location."
+        else:
+            result = calculate_water(rainfall, roof_area, roof_type)
+
+    return {
+        "result": result,
+        "selected_state": selected_state,
+        "selected_district": selected_district,
+        "rainfall": rainfall,
+        "roof_area": roof_area_display if roof_area_display is not None else area_text,
+        "area_unit": area_unit,
+        "water_unit": water_unit,
+        "roof_type": roof_type,
+        "error_message": error_message,
+    }
 
 
 @app.route("/", methods=["GET", "POST"])
 @app.route("/rainharvest-pro", methods=["GET", "POST"])
 @app.route("/rainwater-harvesting", methods=["GET", "POST"])
 def home():
-    result = None
-    selected_state = ""
-    selected_district = ""
-    rainfall = 0
-    roof_area = 100
-    roof_area_display = 100
-    area_unit = "m2"
-    water_unit = "litres"
-    roof_type = "RCC / Concrete"
-    error_message = None
-
+    values = {
+        "result": None,
+        "selected_state": "",
+        "selected_district": "",
+        "rainfall": 0,
+        "roof_area": 100,
+        "area_unit": "m2",
+        "water_unit": "litres",
+        "roof_type": "RCC / Concrete",
+        "error_message": None,
+    }
     if request.method == "POST":
-        selected_state = (request.form.get("state", "") or "").strip()
-        selected_district, district_rainfall = get_locality_values(
-            selected_state,
-            request.form.get("district", "") or "",
-        )
-        rainfall = district_rainfall
-
-        roof_area = to_float(request.form.get("roof_area", 100), 100.0)
-        roof_area_display = roof_area
-       
-        area_unit = request.form.get("area_unit", "m2")
-        if area_unit not in {"m2", "ft2"}:
-            area_unit = "m2"
-        if area_unit == "ft2":
-            roof_area *= 0.092903
-
-        water_unit = request.form.get("water_unit", "litres")
-        if water_unit not in {"litres", "m3"}:
-            water_unit = "litres"
-
-        roof_type = request.form.get("roof_type", "RCC / Concrete")
-        if roof_type not in ROOF_COEFFICIENTS:
-            roof_type = "RCC / Concrete"
-
-        if not selected_state:
-            error_message = "Please choose a state before calculating the potential harvest."
-        elif roof_area <= 0:
-            error_message = "Roof area must be greater than zero to calculate a valid estimate."
-        elif roof_area > MAX_ROOF_AREA_M2:
-            error_message = "Roof area exceeds the supported maximum. Please keep it at or below 100,000 m²."
-        elif rainfall <= 0:
-            error_message = "No rainfall data is available for this location. Please choose another district or state."
-        else:
-            result = calculate_water(rainfall, roof_area, roof_type)
+        values = process_calculator_form(request.form)
 
     return render_template(
         "index.html",
         site_name=SITE_NAME,
         site_slug=SITE_SLUG,
         states=STATES,
-        result=result,
-        selected_state=selected_state,
+        **values,
         districts=DISTRICTS,
-        selected_district=selected_district,
-        rainfall=rainfall,
-        roof_area=roof_area_display,
-        area_unit=area_unit,
-        water_unit=water_unit,
-        roof_type=roof_type,
-        error_message=error_message,
     )
 
 
 @app.route("/calculator", methods=["GET", "POST"])
 def calculator():
-    result = None
-    selected_state = ""
-    selected_district = ""
-    rainfall = 0
-    roof_area = 100
-    roof_area_display = 100
-    area_unit = "m2"
-    water_unit = "litres"
-    roof_type = "RCC / Concrete"
-    error_message = None
-
+    values = {
+        "result": None,
+        "selected_state": "",
+        "selected_district": "",
+        "rainfall": 0,
+        "roof_area": 100,
+        "area_unit": "m2",
+        "water_unit": "litres",
+        "roof_type": "RCC / Concrete",
+        "error_message": None,
+    }
     if request.method == "POST":
-        selected_state = (request.form.get("state", "") or "").strip()
-        selected_district, district_rainfall = get_locality_values(
-            selected_state,
-            request.form.get("district", "") or "",
-        )
-        rainfall = district_rainfall
-
-        roof_area = to_float(request.form.get("roof_area", 100), 100.0)
-        roof_area_display = roof_area
-
-        area_unit = request.form.get("area_unit", "m2")
-        if area_unit not in {"m2", "ft2"}:
-            area_unit = "m2"
-        if area_unit == "ft2":
-            roof_area *= 0.092903
-
-        water_unit = request.form.get("water_unit", "litres")
-        if water_unit not in {"litres", "m3"}:
-            water_unit = "litres"
-
-        roof_type = request.form.get("roof_type", "RCC / Concrete")
-        if roof_type not in ROOF_COEFFICIENTS:
-            roof_type = "RCC / Concrete"
-
-        if not selected_state:
-            error_message = "Please choose a state before calculating the potential harvest."
-        elif roof_area <= 0:
-            error_message = "Roof area must be greater than zero to calculate a valid estimate."
-        elif roof_area > MAX_ROOF_AREA_M2:
-            error_message = "Roof area exceeds the supported maximum. Please keep it at or below 100,000 m²."
-        elif rainfall <= 0:
-            error_message = "No rainfall data is available for this location. Please choose another district or state."
-        else:
-            result = calculate_water(rainfall, roof_area, roof_type)
+        values = process_calculator_form(request.form)
 
     return render_template(
         "calculator.html",
         site_name=SITE_NAME,
         site_slug=SITE_SLUG,
         states=STATES,
-        result=result,
-        selected_state=selected_state,
+        **values,
         districts=DISTRICTS,
-        selected_district=selected_district,
-        rainfall=rainfall,
-        roof_area=roof_area_display,
-        area_unit=area_unit,
-        water_unit=water_unit,
-        roof_type=roof_type,
-        error_message=error_message,
     )
 
 
