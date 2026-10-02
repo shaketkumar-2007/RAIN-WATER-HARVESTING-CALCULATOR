@@ -18,6 +18,9 @@
     --accent: #2477b8;
     --accent-soft: rgba(36, 119, 184, 0.12);
     --accent-strong: #17649e;
+    --on-accent: #ffffff;
+    --panel-muted: #f6faf7;
+    --theme-border: #d6e3da;
     --water-blue: #2477b8;
     --danger: #c84d4d;
     --card-shadow: rgba(34, 63, 84, 0.14);
@@ -3478,6 +3481,15 @@ footer {
         padding: 25px;
     }
 
+    .info-banner strong {
+        color: var(--text);
+    }
+
+    .info-banner a {
+        background: var(--accent);
+        color: var(--on-accent);
+    }
+
     .water-uses-home .water-use-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -4189,7 +4201,7 @@ body {
 .hero-content { max-width: 760px; }
 .hero h1 { max-width: 780px; color: #193b2a; font-size: clamp(38px, 5vw, 62px); letter-spacing: -0.045em; }
 .hero h1 span { color: var(--accent); }
-.hero-showcase { display: none; }
+.hero-showcase { display: block; }
 .hero-lead,
 .education-copy p,
 .practical-card p,
@@ -4420,10 +4432,444 @@ footer { border-top: 1px solid #e5ece6; background: #f6f9f6; color: #52685a; }
 .wizard-panel.is-active { animation: none; }
 
 @media (max-width: 520px) {
-    .hero-summary { display: none; }
+    .hero-summary {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hero-summary .hero-summary-item { min-width: 0; padding: 12px; }
     .proof-strip { grid-template-columns: minmax(0, 1fr); }
     .proof-item,
     .proof-caption { min-width: 0; }
     .proof-item strong,
     .proof-item span { overflow-wrap: anywhere; }
+}
+
+/* Keep custom light and dark themes readable across all page components. */
+body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.header,
+.hero-showcase,
+.calculator-card,
+.result-card,
+.info-card,
+.feature-card,
+.practical-card,
+.formula-card,
+.step-card,
+.education-section,
+.proof-strip,
+.info-banner,
+.recommendation-card,
+.system-flow,
+.result-facts,
+.calculation-card,
+.water-uses,
+.water-uses-home {
+    border-color: var(--theme-border);
+    background: var(--panel);
+    color: var(--text);
+}
+
+.header {
+    box-shadow: 0 8px 28px var(--card-shadow);
+}
+
+.logo,
+.top-nav a,
+.live-status,
+.card-heading h2,
+.result-top h2,
+.formula-card h2,
+.wizard-panel-heading h3,
+.section-heading h2,
+.education-copy h2,
+.practical-card h3,
+.feature-card h3,
+.info-card h3,
+.result-section-heading h3,
+.hero h1,
+.hero h1 span,
+.hero-lead,
+.wizard-back,
+.calculation-equation,
+.result-dashboard .water-unit,
+.water-average,
+.formula,
+.hero-summary-item strong,
+.empty-result-state strong,
+.result-fact strong,
+.result-item strong,
+.flow-node strong,
+.proof-item strong,
+.water-use-grid strong,
+.theme-panel-heading strong,
+.theme-preset,
+.theme-panel label,
+.footer-links strong,
+.footer-disclaimer strong,
+.footer-brand strong {
+    color: var(--text);
+}
+
+.top-nav a,
+.hero-lead,
+.education-copy p,
+.practical-card p,
+.feature-card p,
+.info-card p,
+.formula-card p,
+.result-section-heading p,
+.wizard-panel-heading p,
+.input-intro,
+.input-hint,
+.input-group label span,
+.result-fact span,
+.result-fact small,
+.result-item span,
+.water-use-grid small,
+.proof-item span,
+.proof-caption p,
+.footer-links a,
+.footer-disclaimer,
+.footer-brand span,
+.footer-disclaimer span,
+.theme-panel-heading span,
+.theme-custom-label,
+.showcase-summary span,
+.showcase-summary small {
+    color: var(--muted);
+}
+
+.top-nav a:hover,
+.top-nav a[aria-current="page"] {
+    background: var(--panel-muted);
+    color: var(--accent-strong);
+}
+
+.top-nav a:not(.nav-calculator) {
+    color: var(--text);
+}
+
+html body .website .header .top-nav a:not(.nav-calculator) {
+    color: var(--text);
+}
+
+html body .website .header .top-nav a:visited:not(.nav-calculator) {
+    color: var(--text);
+}
+
+.top-nav a:not(.nav-calculator):hover,
+.top-nav a[aria-current="page"]:not(.nav-calculator) {
+    color: var(--accent-strong);
+}
+
+html body .website .header .top-nav a:not(.nav-calculator):hover,
+html body .website .header .top-nav a[aria-current="page"]:not(.nav-calculator) {
+    color: var(--accent-strong);
+}
+
+html body .website .header .top-nav a:visited:not(.nav-calculator):hover {
+    color: var(--accent-strong);
+}
+
+.top-nav .nav-calculator,
+.top-nav .nav-calculator:hover,
+.primary-btn,
+.calculate-btn,
+.wizard-next,
+.back-to-top {
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.top-nav .nav-calculator:hover,
+.primary-btn:hover,
+.calculate-btn:hover,
+.wizard-next:hover {
+    background: var(--accent-strong);
+    color: var(--on-accent);
+}
+
+.secondary-btn,
+.calculate-again,
+.share-result {
+    border-color: var(--theme-border);
+    background: var(--panel);
+    color: var(--accent-strong);
+}
+
+.hero-summary-item,
+.showcase-summary,
+.result-dashboard .water-result,
+.result-note,
+.empty-result-state,
+.roof-preview,
+.result-item,
+.recommendation,
+.recommendation.green,
+.calculation-total,
+.water-use-grid div,
+.theme-preset,
+.formula span {
+    border-color: var(--theme-border);
+    background: var(--panel-muted);
+}
+
+.hero-summary-item,
+.showcase-summary,
+.result-dashboard .water-result,
+.result-note,
+.empty-result-state,
+.roof-preview,
+.result-item,
+.recommendation,
+.recommendation.green,
+.calculation-total,
+.water-use-grid div,
+.formula span {
+    color: var(--text);
+}
+
+.showcase-summary strong,
+.roof-preview strong,
+.empty-result-state strong,
+.result-item strong,
+.flow-node strong,
+.recommendation-main,
+.category,
+.calculation-equation strong,
+.calculation-total,
+.water-use-grid strong,
+.proof-item strong,
+.proof-caption p,
+.formula span {
+    color: var(--text);
+}
+
+.small-title,
+.section-number,
+.info-label,
+.recommendation-title,
+.wizard-step.is-active,
+.wizard-step.is-complete,
+.wizard-panel-heading .section-number,
+.result-section-heading .section-number,
+.water-number,
+.hero h1 span,
+.section-heading .section-number,
+.recommendation-main,
+.category,
+.calculation-equation strong,
+.calculation-total,
+.section-heading .section-number,
+.step-card span {
+    color: var(--accent-strong);
+}
+
+.wizard-step span,
+.input-group input,
+.input-group select,
+.input-group select option,
+.theme-toggle,
+.theme-panel {
+    border-color: var(--theme-border);
+    background: var(--panel-muted);
+    color: var(--text);
+}
+
+.input-group label {
+    color: var(--text);
+}
+
+.input-group input::placeholder {
+    color: var(--muted);
+    opacity: 0.85;
+}
+
+.input-group input[readonly] {
+    background: var(--panel-muted);
+    color: var(--text);
+}
+
+.input-group select option {
+    background: var(--panel);
+}
+
+.input-group select:disabled {
+    cursor: not-allowed;
+    opacity: 1;
+    color: var(--muted);
+}
+
+.wizard-step.is-active span,
+.wizard-step.is-complete span {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.wizard-connector {
+    background: var(--theme-border);
+}
+
+.showcase-tank {
+    border-color: var(--theme-border);
+    background: var(--panel-muted);
+}
+
+.tank-label,
+.tank-value,
+.tank-value span {
+    color: var(--text);
+}
+
+.simulation-disclaimer {
+    font-size: 11px;
+    font-style: normal;
+}
+
+.theme-panel {
+    border: 1px solid var(--theme-border);
+}
+
+.theme-toggle {
+    box-shadow: 0 4px 14px var(--card-shadow);
+}
+
+.theme-preset {
+    border: 1px solid var(--theme-border);
+}
+
+.theme-preset:hover {
+    border-color: var(--accent-strong);
+    background: var(--accent-soft);
+    color: var(--text);
+}
+
+.theme-panel input[type="color"] {
+    min-width: 44px;
+    min-height: 40px;
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    background: var(--panel);
+}
+
+.footer {
+    background: var(--panel);
+    color: var(--muted);
+}
+
+footer {
+    border-color: var(--theme-border);
+    background: var(--panel);
+    color: var(--muted);
+}
+
+.footer-links a:hover {
+    color: var(--accent-strong);
+}
+
+.info-banner strong {
+    color: var(--text);
+}
+
+.info-banner a {
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.formula {
+    color: var(--accent-strong);
+}
+
+:where(a, button, input, select, summary):focus-visible {
+    outline: 3px solid var(--accent-strong);
+    outline-offset: 3px;
+    box-shadow: var(--focus-ring);
+}
+
+.input-intro {
+    max-width: 620px;
+    margin-top: 8px;
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+@media (min-width: 851px) {
+    .hero {
+        grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+        align-items: center;
+    }
+
+    .hero-showcase {
+        width: 100%;
+        min-height: 420px;
+        margin: 0;
+    }
+}
+
+@media (max-width: 850px) {
+    .header { padding-right: 64px; }
+
+    .hero {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hero-showcase {
+        width: min(100%, 520px);
+        min-height: 390px;
+        margin: 8px auto 0;
+    }
+
+    .hero-showcase .showcase-summary {
+        position: relative;
+        inset: auto;
+        margin: 14px 0 0;
+    }
+}
+
+@media (max-width: 520px) {
+    .header { padding-right: 58px; }
+
+    .theme-toggle {
+        width: 44px;
+        height: 44px;
+    }
+
+    .theme-panel {
+        inset: 68px 12px auto auto;
+        width: min(340px, calc(100vw - 24px));
+        min-width: 0;
+    }
+
+    .input-group input,
+    .input-group select {
+        min-height: 48px;
+        font-size: 16px;
+    }
+
+    .calculate-btn,
+    .wizard-next,
+    .primary-btn,
+    .secondary-btn,
+    .calculate-again,
+    .share-result,
+    .ideas-btn {
+        min-height: 48px;
+    }
+
+    .hero-showcase {
+        min-height: 390px;
+        padding-inline: 16px;
+    }
+
+    .showcase-summary {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+    }
 }
