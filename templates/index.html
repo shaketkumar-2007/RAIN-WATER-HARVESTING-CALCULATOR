@@ -62,10 +62,10 @@
 
         <header class="header">
 
-            <div class="logo">
+            <a class="logo" href="/" aria-label="{{ site_name }} home">
                 <span class="logo-water">💧</span>
                 {{ site_name }}
-            </div>
+            </a>
 
             <nav class="top-nav" aria-label="Main navigation">
                 <a href="/" aria-current="page">Home</a>
@@ -522,7 +522,7 @@
                         </span>
 
                         <strong>
-                            {% if area_unit == "ft2" %}{{ (result.area / 0.092903) | round(2) }} ft²{% else %}{{ result.area }} m²{% endif %}
+                            {% if area_unit == "ft2" %}{{ "{:,.2f}".format(result.area / 0.092903) }} ft²{% else %}{{ "{:,.2f}".format(result.area) }} m²{% endif %}
                         </strong>
 
                     </div>

@@ -62,10 +62,10 @@
 
         <header class="header">
 
-            <div class="logo">
+            <a class="logo" href="/" aria-label="{{ site_name }} home">
                 <span class="logo-water">💧</span>
                 {{ site_name }}
-            </div>
+            </a>
 
             <nav class="top-nav" aria-label="Main navigation">
                 <a href="/">Home</a>
@@ -492,7 +492,7 @@
                         {% if water_unit == "m3" %}CUBIC METRES / YEAR{% else %}LITRES / YEAR{% endif %}
                     </div>
                     <div class="water-average">
-                        ≈ {{ (result.water / 365) | round(0) | int }} L/day annual average, not a daily supply guarantee
+                        ≈ {{ "{:,.0f}".format(result.water / 365) }} L/day annual average, not a daily supply guarantee
                     </div>
 
                 </div>
@@ -563,7 +563,7 @@
                         </div>
                         <div class="result-fact">
                             <span>🏠 CATCHMENT</span>
-                            <strong>{{ result.area }} m²</strong>
+                            <strong>{{ "{:,.2f}".format(result.area) }} m²</strong>
                             <small>effective roof area</small>
                         </div>
                         <div class="result-fact">
@@ -580,7 +580,7 @@
                         <h3 id="calculation-title">How your result was calculated</h3>
                     </div>
                     <div class="calculation-equation">
-                        <div><span>ROOF AREA</span><strong>{{ result.area }} m²</strong></div>
+                        <div><span>ROOF AREA</span><strong>{{ "{:,.2f}".format(result.area) }} m²</strong></div>
                         <b>×</b>
                         <div><span>ANNUAL RAINFALL</span><strong>{{ result.rainfall | round(0) | int }} mm/year</strong></div>
                         <b>×</b>
@@ -662,7 +662,7 @@
                         </span>
 
                         <strong>
-                            {% if area_unit == "ft2" %}{{ (result.area / 0.092903) | round(2) }} ft²{% else %}{{ result.area }} m²{% endif %}
+                            {% if area_unit == "ft2" %}{{ "{:,.2f}".format(result.area / 0.092903) }} ft²{% else %}{{ "{:,.2f}".format(result.area) }} m²{% endif %}
                         </strong>
 
                     </div>

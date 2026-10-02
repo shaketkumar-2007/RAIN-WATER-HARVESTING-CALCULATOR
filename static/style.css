@@ -4164,6 +4164,8 @@ body {
 .top-nav a,
 .live-status { color: var(--text); }
 .logo { font-size: 17px; font-weight: 750; }
+.header .logo { display: inline-flex; align-items: center; text-decoration: none; }
+.header .logo:focus-visible { border-radius: 4px; outline: 3px solid var(--accent-strong); outline-offset: 4px; }
 .top-nav { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border: 0; background: transparent; }
 .top-nav a {
     min-height: 42px;
@@ -5175,7 +5177,7 @@ footer {
 
 @media (max-width: 520px) {
     .smart-message {
-        grid-template-columns: 24px minmax(0, 1fr);
+        grid-template-columns: 34px minmax(0, 1fr);
         gap: 10px;
         padding: 16px;
     }
@@ -5199,6 +5201,46 @@ footer {
     .satisfaction-options {
         grid-template-columns: minmax(0, 1fr);
     }
+}
+
+.result-card,
+.result-card .result-grid,
+.result-card .result-item,
+.result-card .water-result,
+.result-card .recommendation,
+.result-card .recommendation-card,
+.result-card .system-flow,
+.result-card .result-facts,
+.result-card .calculation-card,
+.result-card .water-uses,
+.result-card .smart-message,
+.result-card .satisfaction-card {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.result-card .water-number {
+    max-width: 100%;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    overflow-wrap: anywhere;
+}
+
+.result-card .result-item strong,
+.result-card .result-fact strong,
+.result-card .recommendation-main,
+.result-card .recommendation-card h3,
+.result-card .recommendation-card p,
+.result-card .calculation-equation strong,
+.result-card .calculation-total strong,
+.result-card .water-average {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.result-card .water-uses .water-use-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
 }
 
 @media (max-width: 850px) {

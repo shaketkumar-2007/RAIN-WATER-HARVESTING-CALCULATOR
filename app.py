@@ -67,7 +67,7 @@ RAINFALL_OVERRIDES = {
 
 DISTRICTS = {
     state: {
-        district: RAINFALL_OVERRIDES.get(state, {}).get(district, STATES[state])
+        district.strip(): RAINFALL_OVERRIDES.get(state, {}).get(district.strip(), STATES[state])
         for district in district_names
     }
     for state, district_names in DISTRICT_NAMES.items()

@@ -136,6 +136,25 @@ class CalculationTests(unittest.TestCase):
                 with self.subTest(state=state, district=district):
                     self.assertIn(district, rain_app.DISTRICTS[state])
 
+    def test_district_names_with_trailing_whitespace_remain_selectable(self):
+        for state, district in (
+            ("Chhattisgarh", "Surajpur"),
+            ("Meghalaya", "South West Garo Hills"),
+        ):
+            with self.subTest(state=state, district=district):
+                values = rain_app.process_calculator_form(
+                    {
+                        "state": state,
+                        "district": district,
+                        "roof_area": "100",
+                        "area_unit": "m2",
+                        "water_unit": "litres",
+                        "roof_type": "RCC / Concrete",
+                    }
+                )
+                self.assertIsNone(values["error_message"])
+                self.assertEqual(values["selected_district"], district)
+
     def test_invalid_district_does_not_fall_back_to_state_rainfall(self):
         self.assertEqual(rain_app.get_locality_values("Punjab", "Not a district"), ("", 0))
         self.assertEqual(
@@ -203,6 +222,30 @@ class RouteTests(unittest.TestCase):
         self.assertIn(b"CUBIC METRES / YEAR", response.data)
         self.assertIn(b"COLLECTION EFFICIENCY", response.data)
         self.assertIn(b"85%", response.data)
+
+    def test_extreme_supported_square_foot_area_renders_formatted_results_and_recommendations(self):
+        form = {
+            "state": "Punjab",
+            "district": "Amritsar",
+            "roof_area": "1000000",
+            "area_unit": "ft2",
+            "water_unit": "litres",
+            "roof_type": "RCC / Concrete",
+        }
+        for path in ("/", "/calculator"):
+            with self.subTest(path=path):
+                response = self.client.post(path, data=form)
+                self.assertEqual(response.status_code, 200)
+                self.assertIn(b"42,958,347", response.data)
+                self.assertIn(b"1,000,000.00 ft", response.data)
+                self.assertIn(b"SMART RECOMMENDATION", response.data)
+                recommendation = (
+                    b"RECOMMENDED APPROACH" if path == "/calculator"
+                    else b"RECOMMENDED SYSTEM"
+                )
+                self.assertIn(recommendation, response.data)
+                self.assertIn(b'id="satisfiedCheck"', response.data)
+                self.assertIn(b'id="unsatisfiedCheck"', response.data)
 
     def test_invalid_area_values_render_errors_in_both_calculators(self):
         base = {
